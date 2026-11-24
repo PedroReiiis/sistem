@@ -6,8 +6,8 @@
 <meta name="robots" content="index,follow">
 <title>Cardápio</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-
 <style>
+
 :root{--bg:#f3f2ef;--card:#fff;--tx:#231f1c;--mut:#6f6962;--pri:#c8321e;--acc:#f2b705;--line:#e2dfd9;--ok:#2e7d4f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1817;--card:#262321;--tx:#f1eee9;--mut:#a39d95;--line:#3a3633;--pri:#e5503a;--ok:#5cc08a}}
 :root[data-theme="dark"]{--bg:#1a1817;--card:#262321;--tx:#f1eee9;--mut:#a39d95;--line:#3a3633;--pri:#e5503a;--ok:#5cc08a}
@@ -53,7 +53,6 @@ label{font-size:13px;color:var(--mut);font-weight:600}
 #tk{display:none;font:12px/1.35 "Courier New",monospace;color:#000;background:#fff;padding:2mm}
 @media print{body>*:not(#tk){display:none!important}body::before{display:none!important}body{background:#fff!important}#tk{display:block}@page{margin:0}}
 @media(prefers-reduced-motion:no-preference){.ok{animation:f .3s}}@keyframes f{from{opacity:0}}
-
 :root{--bg:#f6f3ee;--card:#fffdf9;--tx:#1f1a17;--mut:#7a7269;--pri:#b3261e;--acc:#c9961a;--line:#e7e1d8;--hd:#1f1a17;--sh:0 1px 2px rgba(31,26,23,.06),0 6px 18px rgba(31,26,23,.06)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151210;--card:#201c19;--tx:#f3eee7;--mut:#a79f95;--line:#34302c;--pri:#e0564a;--acc:#e3b341;--hd:#0f0d0c;--sh:none}}
 :root[data-theme="dark"]{--bg:#151210;--card:#201c19;--tx:#f3eee7;--mut:#a79f95;--line:#34302c;--pri:#e0564a;--acc:#e3b341;--hd:#0f0d0c;--sh:none}
@@ -83,7 +82,6 @@ input,select{border-radius:10px;padding:11px}
 .bar{background:var(--hd);color:#f3eee7}
 .bar button{background:var(--acc);color:#1f1a17;border-radius:999px;padding:10px 20px}
 .ok{border-radius:10px}
-
 *{font-family:Nunito,system-ui,sans-serif!important}
 :root{--bg:#f7f7f7;--card:#fff;--tx:#3e3e3e;--mut:#717171;--pri:#ea1d2c;--acc:#ea1d2c;--line:#ebebeb;--hd:#fff;--sh:none}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121212;--card:#1e1e1e;--tx:#eee;--mut:#aaa;--line:#333;--hd:#1e1e1e;--pri:#ff4455;--acc:#ff4455}}
@@ -116,9 +114,7 @@ main,.bar{zoom:var(--z,1)}
 .r span.im{flex:none}.tx{flex:1;min-width:0}.pc{font-size:15px}
 .im{width:90px;height:90px;font-size:36px}
 textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--tx);font:15px Nunito,system-ui,sans-serif;margin:3px 0 8px;resize:vertical}
-.seg{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
-.seg button{flex:1;min-width:90px;padding:10px;border:1px solid var(--line);background:var(--card);color:var(--tx);border-radius:8px;font-weight:700;cursor:pointer}
-.seg button.on{border-color:var(--pri);color:var(--pri);box-shadow:inset 0 0 0 1px var(--pri)}
+.seg{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}.seg button{flex:1;min-width:90px;padding:10px;border:1px solid var(--line);background:var(--card);color:var(--tx);border-radius:8px;font-weight:700;cursor:pointer}.seg button.on{border-color:var(--pri);color:var(--pri);box-shadow:inset 0 0 0 1px var(--pri)}
 .sh{max-height:92vh}
 .cols{grid-template-columns:repeat(4,1fr)}
 @media(max-width:1000px){.cols{grid-template-columns:repeat(2,1fr)}}
@@ -126,75 +122,139 @@ textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px
 .col>h4.k3{border-top-color:var(--pri)}
 @media(min-width:700px){.ov{align-items:center}.sh{border-radius:16px}}
 .cap{height:150px;background:linear-gradient(135deg,var(--pri),#ff8a5b) center/cover;margin:-22px -12px 0;border-radius:0 0 14px 14px}
-.lj{display:flex;align-items:flex-end;gap:12px;margin:-34px 0 12px 12px}
-.lj h1{font-size:22px;font-weight:800;margin:0 0 4px}
+.lj{display:flex;align-items:flex-end;gap:12px;margin:-34px 0 12px 12px}.lj h1{font-size:22px;font-weight:800;margin:0 0 4px}
 .lg{width:72px;height:72px;border-radius:50%;border:3px solid var(--card);background:var(--card);object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:30px;flex:none}
-.ch{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:22px}
-.ch h3{margin:0;font-size:16px}
-.ch label{font-size:13px;color:var(--mut);display:flex;align-items:center;white-space:nowrap}
-.gh{display:flex;justify-content:space-between;align-items:baseline;margin:14px 0 6px}
-.gh small{color:var(--mut)}
+.ch{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:22px}.ch h3{margin:0;font-size:16px}.ch label{font-size:13px;color:var(--mut);display:flex;align-items:center;white-space:nowrap}
+.gh{display:flex;justify-content:space-between;align-items:baseline;margin:14px 0 6px}.gh small{color:var(--mut)}
 .ra{flex-wrap:wrap}
 .tabs button{max-width:230px;overflow:hidden;text-overflow:ellipsis}
 button:disabled{opacity:.5;cursor:not-allowed}
-.mv{display:flex;flex-direction:column;gap:2px}
-.mv button{width:28px;height:24px;border:1px solid var(--line);background:var(--card);color:var(--tx);border-radius:6px;cursor:pointer;font-size:12px;padding:0}
-.ch .mv{flex-direction:row}
-.ch input{margin:0;font-weight:800;flex:1;min-width:0}
-.tl{display:flex;gap:4px;margin-top:8px}
-.tl span{flex:1;text-align:center;font-size:12px;padding:6px 2px;border-radius:6px;background:var(--bg);color:var(--mut)}
-.tl span.on{background:var(--ok);color:#fff}
+.mv{display:flex;flex-direction:column;gap:2px}.mv button{width:28px;height:24px;border:1px solid var(--line);background:var(--card);color:var(--tx);border-radius:6px;cursor:pointer;font-size:12px;padding:0}
+.ch .mv{flex-direction:row}.ch input{margin:0;font-weight:800;flex:1;min-width:0}
+.tl{display:flex;gap:4px;margin-top:8px}.tl span{flex:1;text-align:center;font-size:12px;padding:6px 2px;border-radius:6px;background:var(--bg);color:var(--mut)}.tl span.on{background:var(--ok);color:#fff}
 .lj h1{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 
-/* Modal de entrega — visual focado em conversão */
-.ov{align-items:center!important;justify-content:center;padding:16px;background:rgba(15,15,15,.62);backdrop-filter:blur(3px)}
-.sh{width:min(100%,480px);max-height:min(92dvh,820px);overflow-y:auto;overscroll-behavior:contain;background:#fff!important;color:#27272a!important;border:1px solid #f1f1f1;border-radius:16px!important;padding:24px!important;box-shadow:0 24px 70px rgba(0,0,0,.24)!important}
-.sh .delivery-title{margin:0 0 16px;text-align:center;color:#27272a;font-size:20px;font-weight:800;line-height:1.25}
-.sh .location-btn{display:block;width:100%;min-height:48px;margin:0 0 10px;padding:13px 16px;border:0;border-radius:12px;background:linear-gradient(135deg,#b91c1c,#991b1b);color:#fff;font:800 15px Nunito,system-ui,sans-serif;box-shadow:0 7px 16px rgba(153,27,27,.2);cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}
-.sh .location-btn:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(153,27,27,.27);filter:brightness(1.06)}
-.sh .location-btn:active{transform:translateY(0)}
-.sh .location-btn:disabled{opacity:.7;cursor:wait}
-.sh .location-feedback{margin:0 0 14px;padding:9px 12px;border:1px solid #86efac;border-radius:999px;background:#dcfce7;color:#166534;text-align:center;font-size:12px;font-weight:700;animation:locationIn .28s ease both}
-.sh .location-feedback.error{border-color:#fecaca;background:#fef2f2;color:#991b1b}
-@keyframes locationIn{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:translateY(0)}}
-.sh .delivery-fields{display:grid;gap:5px}
-.sh .delivery-fields label{display:block;margin-top:8px;color:#52525b;font-size:13px;font-weight:800}
-.sh .delivery-fields input{width:100%;margin:3px 0 5px;padding:12px 14px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;color:#27272a;font:15px Nunito,system-ui,sans-serif;transition:border-color .18s,box-shadow .18s}
-.sh .delivery-fields input:focus{outline:0;border-color:#991b1b;box-shadow:0 0 0 3px rgba(153,27,27,.10)}
-.sh .privacy-note{margin:13px 2px 15px;color:#71717a;text-align:center;font-size:12px;line-height:1.5}
-.sh .confirm-delivery{width:100%;height:48px;margin-top:10px;border:0;border-radius:10px;background:#27272a;color:#fff;font:800 15px Nunito,system-ui,sans-serif;cursor:pointer;transition:background .18s,transform .18s}
-.sh .confirm-delivery:hover{background:#1f2937;transform:translateY(-1px)}
-@media(max-width:520px){.ov{padding:12px}.sh{width:100%;max-height:calc(100dvh - 24px);padding:21px 18px!important}}
-
-/* Correção: o modal permanece claro mesmo quando o aparelho está em tema escuro */
-.sh,.sh *{color-scheme:light}
-.sh{background:#fff!important;color:#27272a!important}
-.sh h3,.sh h4,.sh p,.sh label,.sh small,.sh span,.sh b,.sh strong{color:inherit}
-.sh .r{background:#fff!important;border:1px solid #e5e7eb!important;color:#27272a!important;border-radius:10px!important;box-shadow:none!important}
-.sh .r span,.sh .r b{color:#27272a!important}
-.sh .seg{display:flex;gap:8px}
-.sh .seg button{flex:1;min-width:0;min-height:48px;padding:10px 8px;background:#fff!important;color:#27272a!important;border:1px solid #d4d4d8!important;border-radius:10px!important;font-weight:800}
-.sh .seg button.on{background:#fff1f2!important;color:#b91c1c!important;border:2px solid #b91c1c!important;box-shadow:0 0 0 1px rgba(185,28,28,.08)!important}
-.sh .b:not(.p){background:#f4f4f5!important;color:#27272a!important;border:1px solid #e4e4e7!important}
-.sh .b.p,.sh button.confirm-delivery{background:#b91c1c!important;color:#fff!important;border:0!important}
-.sh .delivery-fields input,.sh textarea{background:#fff!important;color:#27272a!important;border-color:#e5e7eb!important}
-.sh .privacy-note{color:#71717a!important}
-.sh .location-feedback{background:#dcfce7!important;color:#166534!important}
-.sh .location-feedback.error{background:#fef2f2!important;color:#991b1b!important}
-.sh .x{color:#71717a!important}
 </style>
 </head>
-
 <body>
-<header>
-<b id="sec" onclick="sc()" style="user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;cursor:default">Cardápio</b>
-<div class="acc">
-<button class="ib" onclick="zm(-1)" aria-label="Diminuir letra">A−</button>
-<button class="ib" onclick="zm(1)" aria-label="Aumentar letra">A+</button>
-<button class="ib" onclick="ct()" aria-label="Alto contraste">◑</button>
-<button class="ib" onclick="th()" aria-label="Alternar modo claro e escuro">🌓</button>
-</div>
-</header>
+<header><b id="sec" onclick="sc()" style="user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;cursor:default">Cardápio</b><div class="acc"><button class="ib" onclick="zm(-1)" aria-label="Diminuir letra">A−</button><button class="ib" onclick="zm(1)" aria-label="Aumentar letra">A+</button><button class="ib" onclick="ct()" aria-label="Alto contraste">◑</button><button class="ib" onclick="th()" aria-label="Alternar modo claro e escuro">🌓</button></div></header>
 <main id="app"><p style="padding:20px">Carregando cardápio…</p></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
+const SB_URL="https://rawoxuhvluluvxyyqwud.supabase.co",SB_KEY="sb_publishable_WBNR6zdxRl7b2BjhFUwDbw_345oI6pa";
+const sb=supabase.createClient(SB_URL,SB_KEY);
+const R=v=>"R$ "+Number(v).toFixed(2).replace(".",","),E=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])),dg=t=>(t||"").replace(/\D/g,""),nz=s=>(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+const EM={Lanches:"🍔",Salgados:"🥟",Doces:"🍫",Batatas:"🍟",Bebidas:"🥤"},emj=c=>EM[c]||({"Indica":"⭐","As Fam":"🍽️","Strogo":"🍛","Estaçã":"🍝","Massas":"🍝"})[c.slice(0,6)]||"🍽️";
+let CFG={},C={},ORD=[],all=[];
+const S={cat:"",lines:[],f:{pay:"Pix",tipo:"delivery"},sh:null,ck:0,q:"",msg:"",lm:"",last:null,open:true,cg:[],cb:{on:false,pct:0},gc:{},fee:{def:5,txt:"",lat:"",lng:"",teste:""},min:0,tempo:{delivery:"",retirada:""},cli:null,trk:{},busy:0};
+const gs=x=>S.cg.filter(g=>g.cats[x.c]&&g.ops.some(o=>o.a));
+const need=g=>g.req?Math.max(1,g.min):g.min;
+const okSel=(x,s)=>gs(x).every(g=>(s.sel[g.id]||[]).length>=need(g));
+const selP=(x,sel)=>gs(x).reduce((t,g)=>t+(sel[g.id]||[]).reduce((a,i)=>a+(g.ops[i]?g.ops[i].p:0),0),0);
+const on=(x,sel)=>gs(x).flatMap(g=>(sel[g.id]||[]).map(i=>g.ops[i]).filter(Boolean).map(o=>o.n));
+const lp=l=>{const x=all[l.k];return(x.v?x.v[l.v]:x.p)+selP(x,l.sel||{})};
+const ln=l=>{const x=all[l.k],o=on(x,l.sel||{});return(l.v?l.v+" de ":"")+x.n+(o.length?" + "+o.join(", "):"")+(l.obs?" ("+l.obs+")":"")};
+const ci=()=>S.lines.map(l=>({n:ln(l),q:l.q,p:lp(l),c:all[l.k].c,k:l.k}));
+const tot=()=>ci().reduce((s,x)=>s+x.p*x.q,0),cnt=()=>S.lines.reduce((s,l)=>s+l.q,0);
+const earn=()=>S.cb.on?Math.round(ci().filter(x=>S.gc[x.c]!==false).reduce((s,x)=>s+x.p*x.q,0)*S.cb.pct)/100:0;
+const me=()=>S.cb.on&&S.cli&&dg(S.f.tel)===dg(S.cli.tel)?S.cli:null;
+const bal=()=>me()?me().saldo:0;
+const desc=()=>S.f.usar?Math.min(bal(),tot()):0;
+const fl=()=>S.fee.txt.split("\n").map(l=>l.split("=")).filter(a=>a[1]).map(a=>({km:+a[0],v:+a[1]||0})).filter(x=>x.km>0).sort((a,b)=>a.km-b.km);
+const dist=()=>{if(S.fee.teste!=="")return +S.fee.teste;if(!S.f.loc)return null;const la=+S.fee.lat,lo=+S.fee.lng,[a,b]=S.f.loc.split(",").map(Number),r=Math.PI/180,h=Math.sin((a-la)*r/2)**2+Math.cos(la*r)*Math.cos(a*r)*Math.sin((b-lo)*r/2)**2;return 12742*Math.asin(Math.sqrt(Math.min(1,h)))};
+const fx=()=>{if(!(S.fee.lat&&S.fee.lng))return{v:S.fee.def};const d=dist();return d==null?null:(fl().find(x=>x.km>=d)||false)};
+const feeSt=()=>S.f.tipo=="retirada"?"ok":fx()===null?"sem":fx()===false?"fora":"ok";
+const fee=()=>{if(S.f.tipo=="retirada")return 0;const f=fx();return f?f.v:0};
+const im=x=>x.img?`<img class="im" src="${E(x.img)}" alt="${E(x.n)}" loading="lazy">`:`<span class="im" aria-hidden="true">${emj(x.c)}</span>`;
+const row=x=>`<div class="r">${im(x)}<span class="tx">${E(x.n)}${x.dest?` <small class="tag">🔥 Mais pedido</small>`:""}${x.d?`<br><small style="color:var(--mut)">${E(x.d)}</small>`:""}<br><b class="pc">${x.v&&Object.keys(x.v).length>1?"a partir de ":""}${R(x.p)}</b></span><span class="st"><button onclick="op(${x.k})" aria-label="Adicionar ${E(x.n)}">+</button></span></div>`;
+const lista=()=>{const q=nz(S.q.trim());if(q){const r=ORD.flatMap(c=>C[c].filter(x=>nz(x.n).includes(q)||nz(x.d).includes(q)));return r.length?r.map(row).join(""):`<p style="color:var(--mut)">Nenhum item encontrado.</p>`}
+const c=S.cat;return`<h3>${E(c)}</h3>${C[c]&&C[c][0]&&C[c][0].v?`<small style="color:var(--mut)">Escolha pastel ou tapioca ao adicionar</small>`:""}`+(C[c]||[]).map(row).join("")};
+function rq(){document.getElementById("lista").innerHTML=lista()}
+const tabs=()=>`<div class="tabs">${ORD.map(c=>{const n=(C[c]||[]).reduce((s,x)=>s+S.lines.filter(l=>l.k==x.k).reduce((a,l)=>a+l.q,0),0);return`<button class="${S.cat==c?"on":""}" onclick="S.cat='${c.replace(/'/g,"")}';render()">${E(c)}${n?` <i>${n}</i>`:""}</button>`}).join("")}</div>`;
+const hdr=()=>`<div class="cap"${CFG.capa_url?` style="background-image:url(${E(CFG.capa_url)})"`:""}></div><div class="lj">${CFG.logo_url?`<img class="lg" src="${E(CFG.logo_url)}" alt="Logo">`:`<span class="lg">🍔</span>`}<div><h1>${E(CFG.nome_loja)} <span class="tag${S.open?" pg":""}">${S.open?"Aberta":"Fechada"}</span></h1><small style="color:var(--mut)">Delivery ${E(S.tempo.delivery)} · Retirada ${E(S.tempo.retirada)} · Mínimo ${R(S.min)}</small></div></div>${me()?`<div class="box" style="margin:0 0 10px">Olá, ${E(me().nome||"")}! Seu cashback: <b>${R(me().saldo)}</b></div>`:""}`;
+const ST={recebido:"Recebido",preparo:"Em preparo",saiu:"Saiu para entrega",concluido:"Concluído"};
+const TK=()=>{try{return JSON.parse(localStorage.getItem("dfm_t")||"[]")}catch(e){return[]}};
+const trkH=()=>TK().slice(-2).reverse().map(t=>{
+  const o=S.trk[t.t];
+  if(!o || o.status==="concluido")return"";"";const r=o.tipo=="retirada",L=["recebido","preparo","saiu","concluido"],i=L.indexOf(o.status),c=o.status=="cancelado";return`<div class="box" style="margin:0 0 10px"><b>Pedido #${o.numero}</b> · ${c?`<span style="color:var(--pri)">Cancelado${o.motivo?": "+E(o.motivo):""}</span>`:(o.status=="saiu"&&r?"Pronto para retirada":ST[o.status])}${c?"":`<div class="tl">${L.map((s,j)=>`<span class="${j<=i?"on":""}">${s=="saiu"&&r?"Pronto":ST[s].replace("Saiu para entrega","Saiu")}</span>`).join("")}</div>`}</div>`}).join("");
+async function trkPoll(){for(const t of TK().slice(-3)){const r=await sb.rpc("acompanhar_pedido",{p_token:t.t});if(r.data)S.trk[t.t]=r.data}const e=document.getElementById("trk");if(e)e.innerHTML=trkH()}
+const bag=()=>S.lines.map((l,i)=>`<div class="r"><span class="tx">${l.q}x ${E(ln(l))}</span><b>${R(lp(l)*l.q)}</b><button class="x" onclick="S.lines.splice(${i},1);render()" aria-label="Remover">✕</button></div>`).join("");
+const sheet=()=>{const s=S.sh,x=all[s.k],ov=`<div class="ov" onclick="if(event.target==this){S.sh=null;render()}"><div class="sh">`;
+if(x.v&&!s.v)return ov+`<h3 style="margin-top:0">${E(x.n)}</h3><h4 style="margin:10px 0 8px">Como você prefere?</h4><div class="seg">${Object.keys(x.v).map(o=>`<button onclick="S.sh.v='${o}';render()">${E(o)}<br><small>${R(x.v[o])}</small></button>`).join("")}</div></div></div>`;
+const u=(x.v?x.v[s.v]:x.p)+selP(x,s.sel),ok=okSel(x,s);
+return ov+`<h3 style="margin-top:0">${x.v?E(s.v)+" de ":""}${E(x.n)}</h3>${x.d?`<small style="color:var(--mut)">${E(x.d)}</small>`:""}${x.v&&Object.keys(x.v).length>1?`<br><button class="x" onclick="S.sh.v=null;render()">← trocar de opção</button>`:""}${gs(x).map(g=>{const sl=s.sel[g.id]||[];return`<div class="gh"><b>${E(g.n)}</b><small>${g.req?"Obrigatório":"Opcional"} · ${g.max==1?"escolha 1":"até "+g.max}</small></div>${g.ops.map((o,i)=>o.a?`<label class="r"><span class="tx">${E(o.n)}</span><b>${o.p?"+ "+R(o.p):""}</b><input type="${g.max==1?"radio":"checkbox"}" style="width:auto;margin:0" ${sl.includes(i)?"checked":""} onchange="pk(${g.id},${i})"></label>`:"").join("")}`}).join("")}<label style="display:block;margin-top:12px">Alguma observação? (ex.: tirar cebola)</label><textarea rows="2" oninput="S.sh.obs=this.value">${E(s.obs)}</textarea><div style="display:flex;gap:12px;align-items:center"><span class="st"><button onclick="sq(-1)">−</button><i>${s.q}</i><button onclick="sq(1)">+</button></span>${ok?`<button class="b p" onclick="addL()">Adicionar · ${R(u*s.q)}</button>`:`<button class="b" disabled>Escolha as opções obrigatórias</button>`}</div></div></div>`};
+function op(k){const x=all[k],ks=x.v?Object.keys(x.v):[];S.sh={k,sel:{},obs:"",q:1,v:ks.length==1?ks[0]:null};render()}
+function pk(gid,i){const s=S.sh,g=S.cg.find(g=>g.id==gid),a=s.sel[gid]||(s.sel[gid]=[]),j=a.indexOf(i);if(j>=0)a.splice(j,1);else if(g.max==1){a.length=0;a.push(i)}else if(a.length<g.max)a.push(i);render()}
+function sq(d){S.sh.q=Math.max(1,S.sh.q+d);render()}
+function addL(){const s=S.sh,x=all[s.k];if(!okSel(x,s))return;S.lines.push({k:s.k,v:s.v||null,sel:JSON.parse(JSON.stringify(s.sel)),obs:s.obs.trim(),q:s.q});S.sh=null;render()}
+function loc(){if(!navigator.geolocation){S.lm="Este navegador não permite localização. Use outro navegador ou fale com a loja.";return render()}
+navigator.geolocation.getCurrentPosition(p=>{S.f.loc=p.coords.latitude.toFixed(6)+","+p.coords.longitude.toFixed(6);S.lm="";render()},()=>{S.lm="Não foi possível obter a localização. Libere o acesso à localização no navegador e tente de novo.";render()},{enableHighAccuracy:true,timeout:10000})}
+function cpk(){const k=CFG.pix_chave;if(!k){S.lm="A chave PIX ainda não foi cadastrada. Peça à loja.";return render()}try{navigator.clipboard.writeText(k).then(()=>{S.lm="Chave PIX copiada ✔";render()},()=>{S.lm="Não deu para copiar. Copie a chave acima.";render()})}catch(e){S.lm="Copie a chave acima.";render()}}
+const inp=(k,l,t="text")=>`<label>${l}</label><input type="${t}" value="${E(S.f[k])}" oninput="S.f.${k}=this.value">`;
+const ck=()=>{const f=S.f,d=f.tipo!="retirada",tx=fee(),fs=feeSt(),ds=desc(),T=tot()-ds+tx;
+return`<div class="ov" onclick="if(event.target==this){S.ck=0;render()}"><div class="sh"><h3 style="margin-top:0">Resumo do pedido</h3>${bag()}<div class="r"><span class="tx">Subtotal</span><b>${R(tot())}</b></div>
+<label style="display:block;margin-top:8px">Observações do pedido</label><textarea rows="2" placeholder="Ex.: mandar sachês" oninput="S.f.obs=this.value">${E(f.obs)}</textarea>
+<h4 style="margin:14px 0 6px">Como você quer receber?</h4><div class="seg"><button class="${d?"on":""}" onclick="S.f.tipo='delivery';render()">Delivery</button><button class="${d?"":"on"}" onclick="S.f.tipo='retirada';render()">Retirada no balcão</button></div>
+${inp("nome","Nome")}${inp("tel","WhatsApp com DDD","tel").replace('<input ','<input onchange="render()" ')}
+${d?`${inp("end","Endereço")}${inp("num","Número")}${inp("bairro","Bairro")}${inp("ref","Ponto de referência")}<button class="b" onclick="loc()">📍 Usar minha localização</button><small style="color:var(--mut)">${f.loc?"Localização anexada ✔":"O navegador vai pedir sua permissão. Usamos telefone, endereço e localização só para entregar o pedido."}</small>`:""}
+<h4 style="margin:14px 0 6px">Pagamento</h4><div class="seg">${["Pix","Cartão na entrega","Dinheiro"].map(o=>`<button class="${f.pay==o?"on":""}" onclick="S.f.pay='${o}';render()">${o}</button>`).join("")}</div>
+${f.pay=="Pix"?`<p>Chave PIX: <b>${E(CFG.pix_chave)||"não cadastrada"}</b></p><button class="b" onclick="cpk()">Copiar chave PIX</button><small style="color:var(--mut)">Depois de pagar, a equipe confirma o pagamento.</small>`:""}${f.pay=="Dinheiro"?inp("troco","Troco para quanto?","number"):""}
+${bal()>0?`<label style="display:block;margin-top:8px"><input type="checkbox" style="width:auto;margin:0 6px 0 0" ${f.usar?"checked":""} onchange="S.f.usar=this.checked;render()">Usar meu cashback (${R(bal())})</label>`:""}
+<div class="r" style="margin-top:12px"><span class="tx">${!d?"Retirada no balcão":fs=="fora"?"Fora da área de entrega":fs=="sem"?"Taxa: compartilhe sua localização":"Taxa de entrega"+(dist()!=null?" ("+dist().toFixed(1)+" km)":"")}</span><b>${R(tx)}</b></div>${ds?`<div class="r"><span class="tx">Cashback usado</span><b>-${R(ds)}</b></div>`:""}<div class="r"><span class="tx"><b>Total</b></span><b>${R(T)}</b></div>
+${S.cb.on&&earn()>0?`<small>Você ganha ${R(earn())} de cashback neste pedido.</small>`:""}${S.lm?`<p style="color:var(--pri)">${E(S.lm)}</p>`:""}
+${!S.open?`<button class="b" disabled>Loja fechada no momento</button>`:tot()<S.min?`<button class="b" disabled>Pedido mínimo: ${R(S.min)}</button>`:`<button class="b p" style="height:46px;margin-top:8px" ${S.busy?"disabled":""} onclick="send()">Confirmar pedido · ${R(T)}</button>`}</div></div>`};
+const PG={"Pix":"pix","Cartão na entrega":"cartao","Dinheiro":"dinheiro"};
+function wa(t,m){let d=dg(t);if(d.length<=11)d="55"+d;window.open("https://wa.me/"+d+"?text="+encodeURIComponent(m),"_blank")}
+const msgL=o=>{const p=o.payload,d=p.tipo=="delivery";return`🍔 Novo pedido #${o.numero} (${d?"DELIVERY":"RETIRADA"})\nCliente: ${p.nome} - ${p.telefone}\n${d?`Endereço: ${p.endereco}, ${p.numero_casa} - ${p.bairro}`:"Retirada no balcão"}`+(p.referencia?`\nRef.: ${p.referencia}`:"")+(p.localizacao?`\n📍 https://maps.google.com/?q=${p.localizacao}`:"")+`\n\n${o.itens.join("\n")}`+(p.observacao?`\n\nObs.: ${p.observacao}`:"")+`\n\n💰 ${p.pagto} - ${R(o.total)}`+(p.troco?` (troco para ${R(p.troco)})`:"")};
+const ERR=[["loja fechada","A loja está fechada no momento."],["abaixo do minimo","O pedido está abaixo do valor mínimo."],["fora da area","Este endereço está fora da área de entrega."],["localizacao obrigatoria","Compartilhe sua localização para calcular a taxa de entrega."],["indisponivel","Algum item ficou indisponível. Atualize a página e monte o pedido de novo."],["pausada","Uma categoria foi pausada. Atualize a página."],["escolha invalida","Falta escolher uma opção obrigatória de algum item."],["cashback","Para usar o cashback, abra o seu link pessoal."],["endereco incompleto","Preencha endereço, número e bairro."]];
+const errMsg=m=>(ERR.find(e=>(m||"").includes(e[0]))||[0,"Não foi possível enviar o pedido. Tente de novo em instantes."])[1];
+async function send(){const f=S.f,d=f.tipo!="retirada";if(S.busy)return;
+if(!S.open){S.lm="A loja está fechada no momento.";return render()}
+if(!cnt()){S.lm="Sua sacola está vazia.";return render()}
+if(tot()<S.min){S.lm="O pedido mínimo é "+R(S.min)+".";return render()}
+if(!f.nome||!f.tel||(d&&(!f.end||!f.num||!f.bairro))){S.lm=d?"Preencha nome, telefone, endereço, número e bairro.":"Preencha nome e telefone.";return render()}
+if(d&&feeSt()!="ok"){S.lm=feeSt()=="fora"?"Este endereço está fora da área de entrega.":"Compartilhe sua localização para calcular a taxa de entrega.";return render()}
+const itens=S.lines.map(l=>{const x=all[l.k];return{produto_id:x.id,qtd:l.q,opcao:l.v||null,complementos:gs(x).flatMap(g=>(l.sel[g.id]||[]).map(i=>g.ops[i]).filter(Boolean).map(o=>o.id)),observacao:l.obs||null}});
+const payload={tipo:d?"delivery":"retirada",nome:f.nome,telefone:f.tel,endereco:d?f.end:null,numero_casa:d?f.num:null,bairro:d?f.bairro:null,referencia:d?(f.ref||null):null,localizacao:d?(f.loc||null):null,observacao:f.obs||null,pagamento:PG[f.pay],troco:f.pay=="Dinheiro"&&f.troco?+f.troco:null,itens};
+if(f.usar&&me()){payload.usar_cashback=true;payload.cliente_token=S.cli.token}
+const resumo=ci().map(x=>x.q+"x "+x.n);
+S.busy=1;S.lm="Enviando…";render();
+const r=await sb.rpc("criar_pedido",{p:payload});S.busy=0;
+if(r.error){S.lm=errMsg(r.error.message);return render()}
+const o=r.data;try{const a=TK();a.push({t:o.token,n:o.numero});localStorage.setItem("dfm_t",JSON.stringify(a.slice(-10)))}catch(e){}
+S.last={numero:o.numero,total:o.total,payload:{...payload,pagto:f.pay},itens:resumo};
+if(CFG.loja_whatsapp)wa(CFG.loja_whatsapp,msgL(S.last));
+S.msg="Pedido #"+o.numero+" confirmado! Acompanhe o andamento logo abaixo."+(CFG.loja_whatsapp?" Se o WhatsApp abriu, toque em enviar para a loja receber o resumo também.":"");
+S.lines=[];S.f={pay:"Pix",tipo:"delivery",tel:S.cli?S.cli.tel:"",nome:S.cli?S.cli.nome||"":""};S.lm="";S.ck=0;
+if(S.cli){const r2=await sb.rpc("meu_cashback",{p_token:S.cli.token});if(r2.data)S.cli.saldo=+r2.data.saldo}
+await trkPoll();render();scrollTo(0,0)}
+function vC(){let h=hdr()+(S.open?"":`<div class="ok" style="background:var(--mut)">Loja fechada no momento. Você pode ver o cardápio, mas só consegue enviar pedidos quando abrirmos.</div>`)+`<div id="trk">${trkH()}</div>`+(S.msg?`<div class="ok">${E(S.msg)}${S.last&&CFG.loja_whatsapp?`<button class="b" style="margin-top:8px" onclick="wa(CFG.loja_whatsapp,msgL(S.last))">Abrir o WhatsApp da lanchonete</button>`:""}</div>`:"")+"<h2>Faça seu pedido</h2>"+`<input type="search" placeholder="Pesquisar itens na loja" value="${E(S.q)}" oninput="S.q=this.value;rq()" aria-label="Pesquisar itens">`+tabs()+`<div id="lista">${lista()}</div>`;
+const mn=S.min-tot();
+if(cnt())h+=`<div class="bar"><span>🛒 ${cnt()} ${cnt()==1?"item":"itens"} · <b>${R(tot())}</b></span>${mn>0?`<small>Faltam ${R(mn)} para o valor mínimo</small>`:`<button ${S.open?"":"disabled"} onclick="S.ck=1;render()">${S.open?"Finalizar pedido":"Loja fechada"}</button>`}</div>`;
+return h+(S.sh?sheet():"")+(S.ck?ck():"")}
+function render(){const y=scrollY,m0=document.querySelector(".sh"),st0=m0?m0.scrollTop:0;document.getElementById("app").innerHTML=vC();
+document.documentElement.style.setProperty("--hh",document.querySelector("header").offsetHeight+"px");scrollTo(0,y);const m1=document.querySelector(".sh");if(m1)m1.scrollTop=st0}
+// passagem secreta: 3 cliques seguidos em "Cardápio" no cabeçalho abrem o painel
+let SCn=0,SCt;function sc(){SCn++;clearTimeout(SCt);SCt=setTimeout(()=>{SCn=0},1000);if(SCn>=3){SCn=0;location.href="painel.html"}}
+let Z=1;function zm(d){Z=Math.min(1.4,Math.max(.9,Z+d*.1));document.documentElement.style.setProperty("--z",Z)}
+function ct(){const r=document.documentElement;r.dataset.c=r.dataset.c=="1"?"0":"1"}
+function th(){const r=document.documentElement,c=r.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");r.dataset.theme=c=="dark"?"light":"dark"}
+async function load(){const sel=t=>sb.from(t).select("*");
+const [cf,ct,pr,op,gr,oc,gc,fx,ab]=await Promise.all([sel("config").eq("id",1).single(),sel("categorias").order("ordem"),sel("produtos").order("ordem"),sel("produto_opcoes"),sel("grupos_complemento").order("ordem"),sel("opcoes_complemento").order("ordem"),sel("grupo_categorias"),sel("faixas_entrega").order("km_ate"),sb.rpc("loja_aberta")]);
+for(const r of [cf,ct,pr,op,gr,oc,gc,fx])if(r.error)throw r.error;
+CFG=cf.data;C={};ORD=[];all=[];const cid={};
+ct.data.forEach(c=>{C[c.nome]=[];ORD.push(c.nome);cid[c.id]=c.nome;S.gc[c.nome]=c.gera_cashback});
+pr.data.forEach(p=>{const n=cid[p.categoria_id];if(!n)return;const x={id:p.id,n:p.nome,d:p.descricao||"",p:+p.preco,c:n,img:p.foto_url,dest:p.destaque},o=op.data.filter(y=>y.produto_id==p.id);if(o.length){x.v={};o.forEach(y=>x.v[y.nome]=+y.preco);x.p=Math.min(...Object.values(x.v))}x.k=all.push(x)-1;C[n].push(x)});
+S.cg=gr.data.map(g=>{const cats={};gc.data.filter(y=>y.grupo_id==g.id).forEach(y=>{if(cid[y.categoria_id])cats[cid[y.categoria_id]]=1});return{id:g.id,n:g.nome,req:g.obrigatorio,min:g.min_escolhas,max:g.max_escolhas,cats,ops:oc.data.filter(o=>o.grupo_id==g.id).map(o=>({id:o.id,n:o.nome,p:+o.preco,a:1}))}});
+S.fee={def:+CFG.taxa_entrega_padrao,txt:fx.data.map(f=>f.km_ate+"="+f.taxa).join("\n"),lat:CFG.loja_lat??"",lng:CFG.loja_lng??"",teste:""};
+S.min=+CFG.pedido_minimo;S.tempo={delivery:CFG.tempo_delivery,retirada:CFG.tempo_retirada};S.cb={on:!!CFG.cashback_ativo,pct:+CFG.cashback_pct};S.open=ab.data!==false;
+if(!S.cat||!C[S.cat])S.cat=ORD[0]||"";document.title=CFG.nome_loja||"Cardápio"}
+async function loadCli(){let t=null;const m=(location.hash||"").match(/^#c-([0-9a-fA-F-]{36})$/);try{if(m){t=m[1];localStorage.setItem("dfm_c",t)}else t=localStorage.getItem("dfm_c")}catch(e){if(m)t=m[1]}
+if(!t)return;const r=await sb.rpc("meu_cashback",{p_token:t});if(r.data){S.cli={token:t,nome:r.data.nome,tel:r.data.telefone,saldo:+r.data.saldo};if(!S.f.tel){S.f.tel=S.cli.tel;S.f.nome=S.cli.nome||""}}}
+(async()=>{try{await load();await loadCli()}catch(e){document.getElementById("app").innerHTML='<p style="padding:20px">Não foi possível carregar o cardápio agora. Atualize a página em instantes.</p>';return}
+render();trkPoll();setInterval(trkPoll,15000);
+setInterval(async()=>{const r=await sb.rpc("loja_aberta");if(r.data!==null&&r.data!==S.open){S.open=r.data;if(!S.sh&&!S.ck)render()}},60000)})();
+
+</script>
+</body>
+</html>
