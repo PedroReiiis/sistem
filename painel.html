@@ -239,14 +239,24 @@ const itTxt=i=>`${i.qtd}x ${i.nome}${(i.complementos||[]).length?" + "+i.complem
 const isBeb=i=>{const p=D.pro.find(x=>x.id==i.produto_id),c=p&&D.cat.find(c=>c.id==p.categoria_id);return!!c&&/bebida/i.test(c.nome)};
 const P=id=>D.ped.find(o=>o.id==id);
 const hhmm=o=>new Date(o.criado_em).toTimeString().slice(0,5);
-function msgE(o){const b=(o.pedido_itens||[]).filter(isBeb);return`🛵 Pedido #${o.numero}\nCliente: ${o.nome} - ${o.telefone}\nEndereço: ${addr(o)}`+(o.referencia?`\nRef.: ${o.referencia}`:"")+(o.localizacao?`\n📍 https://maps.google.com/?q=${o.localizacao}`:"")+(b.length?`\n🥤 ${b.map(i=>i.qtd+"x "+i.nome).join(", ")}`:"")+`\n💰 ${PAG[o.pagamento]} - ${R(o.total)}`+(o.pagamento=="dinheiro"&&+o.troco?` (troco para ${R(o.troco)})`:"")+(o.pago?" - já pago":"")}
+// mensagem de WhatsApp enviada ao entregador, com todas as características do pedido
+function msgE(o){const its=(o.pedido_itens||[]).map(i=>(isBeb(i)?"🥤 ":"• ")+itTxt(i)).join("\n"),
+mapa=o.localizacao?`https://maps.google.com/?q=${encodeURIComponent(o.localizacao)}`:`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr(o))}`;
+return`🛵 *NOVA ENTREGA — Pedido #${o.numero}*`
++`\n\n👤 *Cliente:* ${o.nome}\n📞 ${o.telefone}`
++`\n\n📍 *Endereço:* ${addr(o)}`+(o.referencia?`\n🔎 Ref.: ${o.referencia}`:"")+`\n🗺️ Mapa: ${mapa}`
++`\n\n🧾 *Itens:*\n${its}`
++(o.observacao?`\n\n⚠️ *Obs. do pedido:* ${o.observacao}`:"")
++`\n\n💰 *${o.pago?"JÁ PAGO — nada a cobrar":"COBRAR "+R(o.total)}*\nForma: ${PAG[o.pagamento]||"-"}`
++(o.pagamento=="dinheiro"&&+o.troco&&!o.pago?`\nTroco para: ${R(o.troco)}`:"")}
 const itLi=i=>`<li><b>${i.qtd}x</b> ${E(i.nome)}${(i.complementos||[]).length?` <small>+ ${E(i.complementos.map(c=>c.nome).join(", "))}</small>`:""}${i.observacao?`<em>⚠ ${E(i.observacao)}</em>`:""}</li>`;
-function card(o){const r=o.tipo=="retirada",st=o.status,ab=["recebido","preparo","saiu"].includes(st),en=D.en.filter(e=>e.ativo),tk=o.clientes&&o.clientes.token,ent=D.en.find(e=>e.id==o.entregador_id),id=o.id;let b="";
+function card(o){const r=o.tipo=="retirada",st=o.status,ab=["recebido","preparo","saiu"].includes(st),en=D.en.filter(e=>e.ativo),tk=o.clientes&&o.clientes.token,ent=D.en.find(e=>e.id==o.entregador_id),id=o.id;let b="",sel="";
 const mp=o.localizacao?`https://maps.google.com/?q=${encodeURIComponent(o.localizacao)}`:`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr(o))}`;
 if(st=="recebido")b=`<button class="b p full" onclick="adv('${id}','preparo')">Iniciar preparo →</button>`;
-if(st=="preparo"){b=r?`<button class="b bl" onclick="adv('${id}','saiu')">Pronto p/ retirada</button>`:`<button class="b bl" onclick="sendMoto('${id}')">🛵 Enviar p/ Motoboy</button>`;
+if(st=="preparo"){b=r?`<button class="b bl" onclick="adv('${id}','saiu')">Pronto p/ retirada</button>`:`<button class="b bl" onclick="sendMoto('${id}')">🛵 Enviar p/ Motoboy${en.length?" (WhatsApp)":""}</button>`;
 b+=`<button class="b g" onclick="darPronto('${id}')">Dar Pronto</button>`;
-if(!r&&en.length)b+=`<select id="s${o.numero}">${en.map(e=>`<option value="${e.id}">${E(e.nome)}</option>`).join("")}</select><button class="b full" onclick="goEnt('${id}',${o.numero})">Enviar ao entregador (WhatsApp)</button>`}
+// só aparece a escolha do entregador quando há mais de um ativo; lembra a escolha do pedido e o último usado
+if(!r&&en.length>1){const ult=ENS[id]||localStorage.getItem("dfm_ent_ult");sel=`<select id="s${o.numero}" aria-label="Escolher entregador" onchange="ENS['${id}']=this.value">${en.map(e=>`<option value="${e.id}"${String(e.id)==String(ult)?" selected":""}>🛵 ${E(e.nome)}</option>`).join("")}</select>`}}
 if(st=="saiu")b=`<button class="b" onclick="avisa('${id}')">Avisar cliente</button><button class="b g" onclick="darPronto('${id}')">Dar Pronto</button>`;
 if(st=="concluido")b=`<button class="b p full" onclick="finalizar('${id}')">✔ Dar baixa (sair da tela)</button>`;
 return`<div class="card"><div class="ch1"><span class="nm">#${o.numero} · ${hhmm(o)}</span><span class="bdg"><span class="tag dl">${r?"Retirada":"Delivery"}</span><span class="tag${o.pago?" pg":""}" style="cursor:pointer" onclick="pago('${id}',${!o.pago})">${o.pago?"Pago":"Cobrar"}</span></span></div>
@@ -254,12 +264,19 @@ return`<div class="card"><div class="ch1"><span class="nm">#${o.numero} · ${hhm
 <ul class="its">${(o.pedido_itens||[]).map(itLi).join("")}</ul>${o.observacao?`<small>Obs.: ${E(o.observacao)}</small><br>`:""}${o.nota_interna?`<small>Nota interna: ${E(o.nota_interna)}</small><br>`:""}
 <div class="cf"><b>${R(o.total)}</b><small>${PAG[o.pagamento]||""}${o.pagamento=="dinheiro"&&+o.troco?" · troco p/ "+R(o.troco):""}</small></div>${+o.taxa_entrega?`<small>entrega ${R(o.taxa_entrega)}</small> `:""}${+o.cashback_usado?`<small>cashback usado ${R(o.cashback_usado)}</small> `:""}${+o.desconto_extra?`<small>desconto ${R(o.desconto_extra)}</small>`:""}${ent?`<br><small>Entregador: ${E(ent.nome)}</small>`:""}${st=="cancelado"?`<br><small style="color:#f87171">Cancelado: ${E(o.motivo_cancelamento||"")}</small>`:""}
 ${tk&&st!="cancelado"?`<button class="lk" onclick="link('${id}')">Enviar link pessoal ao cliente</button>`:""}
-<div class="ac"><button class="b" onclick="prt('${id}')">🖨️ Imprimir</button>${b}${ab?`<button class="b" onclick="MODAL={t:'aj',id:'${id}'};render()">Ajustar</button><button class="b" onclick="MODAL={t:'cx',id:'${id}',m:''};render()">Cancelar</button>`:""}</div></div>`}
+<div class="ac">${sel}<button class="b" onclick="prt('${id}')">🖨️ Imprimir</button>${b}${ab?`<button class="b" onclick="MODAL={t:'aj',id:'${id}'};render()">Ajustar</button><button class="b" onclick="MODAL={t:'cx',id:'${id}',m:''};render()">Cancelar</button>`:""}</div></div>`}
 async function adv(id,st){await upd(id,{status:st});await loadPed();render();if(st=="preparo"&&AP)prt(id)}
-async function sendMoto(id){await upd(id,{status:"saiu"});await loadPed();render();tst("Pedido enviado para a tela do motoboy")}
+const ENS={}; // entregador escolhido por pedido (sobrevive aos redesenhos da tela)
+// Enviar p/ Motoboy: coloca o pedido na tela do motoboy e abre o WhatsApp do entregador (cadastrado em Ajustes) com os dados do pedido
+async function sendMoto(id){const o=P(id);if(!o)return;const en=D.en.filter(x=>x.ativo),el=$("s"+o.numero),eid=el?+el.value:(en[0]&&en[0].id),e=en.find(x=>x.id==eid),
+w=(e&&e.whatsapp)?window.open("about:blank","_blank"):null; // abre a aba ANTES do await, senão o navegador bloqueia o pop-up
+try{await upd(id,e?{status:"saiu",entregador_id:e.id}:{status:"saiu"})}catch(err){if(w)w.close();return}
+if(e){try{localStorage.setItem("dfm_ent_ult",String(e.id))}catch(x){}}
+if(w)w.location.href=waUrl(e.whatsapp,msgE(o));
+tst(!e?"Pedido enviado para a tela do motoboy. Cadastre um entregador em Ajustes para também enviar por WhatsApp.":!e.whatsapp?"Pedido enviado para a tela do motoboy, mas "+e.nome+" está sem WhatsApp cadastrado.":!w?"Pedido enviado, mas o navegador bloqueou o WhatsApp. Permita pop-ups neste site.":"Pedido enviado para "+e.nome+" pelo WhatsApp");
+await loadPed();render()}
 async function darPronto(id){await upd(id,{status:"concluido",pronto:true});await loadPed();render()}
 async function finalizar(id){const o=P(id);if(!o)return;await upd(id,{arquivado:true});await loadPed();render()}
-async function goEnt(id,num){const el=$("s"+num),eid=+el.value,e=D.en.find(x=>x.id==eid),o=P(id),w=e?window.open("about:blank","_blank"):null;await upd(id,{status:"saiu",entregador_id:eid});if(w)w.location.href=waUrl(e.whatsapp,msgE(o));await loadPed();render()}
 function avisa(id){const o=P(id);wa(o.telefone,o.tipo=="retirada"?`Seu pedido #${o.numero} está pronto para retirada ✔`:`Seu pedido #${o.numero} saiu para entrega 🛵`)}
 function link(id){const o=P(id);wa(o.telefone,"Seu link pessoal para pedir e usar seu cashback: "+new URL("./",location.href).href+"#c-"+o.clientes.token)}
 async function pago(id,v){await upd(id,{pago:v});await loadPed();render()}
