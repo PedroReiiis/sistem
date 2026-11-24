@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <title>Entregas</title>
-<link href="https://googleapis.com" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#fff;--tx:#000;--mut:#333;--line:#000;--pri:#B00020;--ok:#0A7A2F;--blue:#0B4FC4;--warn:#FFD400}
 *{box-sizing:border-box}
@@ -36,232 +36,90 @@ main{max-width:640px;margin:0 auto;padding:12px 12px calc(40px + env(safe-area-i
 .btn.mp{background:var(--blue);color:#fff}
 .btn.ok{grid-column:1/-1;min-height:68px;font-size:21px;background:var(--ok);color:#fff}
 .btn.ok.c{background:var(--warn);color:#000}
+.btn.dk{background:#000;color:#fff}
+.btn:disabled{opacity:.5}
+.box{background:#fff;border:3px solid #000;border-radius:16px;padding:16px;max-width:380px;margin:40px auto}
+.box .btn{margin-top:8px}
+label{display:block;font-size:15px}
+input{width:100%;padding:12px;border:3px solid #000;border-radius:10px;font-size:17px;margin:4px 0 12px}
+.msg{margin:10px 0 0;font-size:15px}
+.msg.err{color:var(--pri)}.msg.good{color:var(--ok)}
 .empty{text-align:center;padding:40px 10px;font-size:20px;color:var(--mut)}
 #toast{display:none;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#000;color:#fff;padding:12px 18px;border-radius:10px;z-index:30;max-width:92vw}
 </style>
 </head>
 <body>
-<header id="hd">
-  <b>🛵 Entregas</b>
-  <button id="bs" onclick="togSom()">🔔 Som: desligado</button>
-  <button onclick="load()">↻ Atualizar</button>
-</header>
-<main id="app"><div class="empty">Conectando...</div></main>
+<header id="hd" style="display:none"><b>🛵 Entregas</b><button id="bs" onclick="togSom()">🔔 Som: desligado</button><button onclick="load()">↻ Atualizar</button><button onclick="abrirSenha('chg')">🔑 Senha</button><button onclick="sair()">Sair</button></header>
+<main id="app"></main>
 <div id="toast"></div>
-
-<script src="https://jsdelivr.net"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
-const SB_URL = "https://supabase.co";
-const SB_KEY = "sb_publishable_WBNR6zdxRl7b2BjhFUwDbw_345oI6pa";
-const sb = supabase.createClient(SB_URL, SB_KEY);
-
-// Credenciais automáticas (invisíveis para o motoboy)
-const AUTO_EMAIL = "motoboy@deufome.com";
-const AUTO_PASS  = "123456"; // <--- Mesma senha definida no painel do Supabase
-
-const R = v => "R$ " + Number(v || 0).toFixed(2).replace(".", ",");
-const E = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const dg = t => (t || "").replace(/\D/g, "");
-const $ = id => document.getElementById(id);
-
-const PAG = {pix: "Pix", cartao: "Cartão na entrega", dinheiro: "Dinheiro"};
-
-let U = null, L = [], SOM = false, SEEN = null, LMSG = "", RT = null, busy = false;
-
-const tst = m => {
-  const e = $("toast");
-  e.textContent = m;
-  e.style.display = "block";
-  clearTimeout(tst.t);
-  tst.t = setTimeout(() => e.style.display = "none", 5000);
-};
-
-const lsAdd = (k, id) => {
-  try {
-    const a = JSON.parse(localStorage.getItem(k) || "[]");
-    if (!a.includes(id)) {
-      a.push(id);
-      localStorage.setItem(k, JSON.stringify(a.slice(-500)));
-    }
-  } catch (e) {}
-};
-
-async function upd(id, patch) {
-  const r = await sb.from("pedidos").update(patch).eq("id", id);
-  if (!r.error) return;
-  if ("pronto" in patch && /column|schema|pronto/i.test(r.error.message || "")) {
-    const p2 = {...patch};
-    delete p2.pronto;
-    lsAdd("dfm_pronto", id);
-    const r2 = await sb.from("pedidos").update(p2).eq("id", id);
-    if (r2.error) throw r2.error;
-    return;
-  }
-  throw r.error;
-}
-
-// Som Super Mario (warp pipe) — Web Audio
+const SB_URL="https://rawoxuhvluluvxyyqwud.supabase.co",SB_KEY="sb_publishable_WBNR6zdxRl7b2BjhFUwDbw_345oI6pa";
+const sb=supabase.createClient(SB_URL,SB_KEY);
+const R=v=>"R$ "+Number(v||0).toFixed(2).replace(".",","),E=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])),dg=t=>(t||"").replace(/\D/g,"");
+const $=id=>document.getElementById(id);
+const PAG={pix:"Pix",cartao:"Cartão na entrega",dinheiro:"Dinheiro"};
+const LOGIN_EMAIL="cryspe2@gmail.com";
+let U=null,L=[],SOM=false,SEEN=null,CF="",LMSG="",LOK=false,RT=null,busy=false,PW=/type=recovery/.test(location.hash)?"rec":"";
+const tst=m=>{const e=$("toast");e.textContent=m;e.style.display="block";clearTimeout(tst.t);tst.t=setTimeout(()=>e.style.display="none",5000)};
+// fallback seguro para colunas opcionais
+const lsAdd=(k,id)=>{try{const a=JSON.parse(localStorage.getItem(k)||"[]");if(!a.includes(id)){a.push(id);localStorage.setItem(k,JSON.stringify(a.slice(-500)))}}catch(e){}};
+async function upd(id,patch){const r=await sb.from("pedidos").update(patch).eq("id",id);if(!r.error)return;
+if("pronto" in patch&&/column|schema|pronto/i.test(r.error.message||"")){const p2={...patch};delete p2.pronto;lsAdd("dfm_pronto",id);const r2=await sb.from("pedidos").update(p2).eq("id",id);if(r2.error)throw r2.error;return}
+throw r.error}
+// som Super Mario (warp pipe) — Web Audio
 let ac;
-function tocarSomMarioPipe() {
-  try {
-    const A = window.AudioContext || window.webkitAudioContext;
-    ac = ac || new A();
-    if (ac.state == "suspended") ac.resume();
-    const t0 = ac.currentTime + .02;
-    [[740,330],[587,262],[440,196]].forEach(([f1,f2], i) => {
-      const t = t0 + i * .17, o = ac.createOscillator(), g = ac.createGain();
-      o.type = "square";
-      o.frequency.setValueAtTime(f1, t);
-      o.frequency.exponentialRampToValueAtTime(f2, t + .14);
-      g.gain.setValueAtTime(.0001, t);
-      g.gain.exponentialRampToValueAtTime(.12, t + .01);
-      g.gain.setValueAtTime(.12, t + .11);
-      g.gain.exponentialRampToValueAtTime(.0001, t + .15);
-      o.connect(g);
-      g.connect(ac.destination);
-      o.start(t);
-      o.stop(t + .16);
-    });
-  } catch (e) {}
-}
-
-function setSom(v) {
-  SOM = v;
-  $("bs").textContent = "🔔 Som: " + (SOM ? "ligado" : "desligado");
-  $("bs").classList.toggle("on", SOM);
-}
-function togSom() { setSom(!SOM); tocarSomMarioPipe(); }
-
-async function start(u) {
-  const s = await sb.from("staff").select("user_id,papel").eq("user_id", u.id).maybeSingle();
-  if (!s.data) {
-    LMSG = "Conta sem permissão na tabela staff.";
-    draw();
-    return;
-  }
-  U = u;
-  LMSG = "";
-  draw();
-  setSom(true);
-  await load();
-  subRT();
-}
-
-// Carrega pedidos com status "saiu"
-async function load() {
-  if (!U) return;
-  const r = await sb.from("pedidos")
-    .select("*, pedido_itens(*)")
-    .eq("tipo", "delivery")
-    .eq("status", "saiu")
-    .order("criado_em", {ascending: true});
-    
-  if (r.error) {
-    tst("Erro ao carregar: " + r.error.message);
-    return;
-  }
-  L = (r.data || []).filter(o => o.arquivado !== true);
-  const ids = new Set(L.map(o => o.id));
-  if (SEEN && SOM && [...ids].some(i => !SEEN.has(i))) tocarSomMarioPipe();
-  SEEN = ids;
-  draw();
-}
-
-function subRT() {
-  if (RT) return;
-  RT = sb.channel("moto")
-    .on("postgres_changes", {event: "*", schema: "public", table: "pedidos"}, () => {
-      clearTimeout(subRT.t);
-      subRT.t = setTimeout(() => { if (U) load(); }, 400);
-    })
-    .subscribe();
-  setInterval(() => { if (U && !busy) load(); }, 15000);
-}
-
-const mapU = o => o.localizacao
-  ? "https://google.com" + encodeURIComponent(o.localizacao)
-  : "https://google.com" + encodeURIComponent(`${o.endereco}, ${o.numero_casa} - ${o.bairro}`);
-
-const waU = o => {
-  let d = dg(o.telefone);
-  if (d.length <= 11) d = "55" + d;
-  return "https://wa.me" + d + "?text=" + encodeURIComponent(`Olá, ${o.nome}! Sou o entregador do pedido #${o.numero}, estou a caminho.`);
-};
-
-const itLi = i => {
-  const comps = (i.complementos || []).map(c => typeof c === "string" ? c : c.nome).filter(Boolean).join(", ");
-  return `<li><b>${i.qtd}x</b> ${E(i.nome)}${comps ? `<em>${E(comps)}</em>` : ""}${i.obs ? `<em>Obs: ${E(i.obs)}</em>` : ""}</li>`;
-};
-
-async function entregar(id, num) {
-  if (busy) return;
-  if (!confirm(`Confirmar entrega do pedido #${num}?`)) return;
-  busy = true;
-  try {
-    await upd(id, {status: "entregue"});
-    tst(`Pedido #${num} finalizado!`);
-    await load();
-  } catch (e) {
-    tst("Erro: " + (e.message || e));
-  } finally {
-    busy = false;
-  }
-}
-
-function cardH(o) {
-  const pago = o.pago === true || o.forma_pagamento === "pix";
-  const pagTxt = PAG[o.forma_pagamento] || o.forma_pagamento || "Não informado";
-  const troco = o.troco_para ? ` (Troco p/ ${R(o.troco_para)})` : "";
-  const itens = (o.pedido_itens || []).map(itLi).join("");
-
-  return `<div class="card">
-    <div class="top">
-      <span class="num">#${E(o.numero)}</span>
-      <span class="badge ${pago ? "pago" : "cob"}">${pago ? "✅ JÁ PAGO" : "💰 COBRAR NA ENTREGA"}</span>
-    </div>
-    <div class="cli">${E(o.nome)}</div>
-    <div class="addr">📍 ${E(o.endereco)}, ${E(o.numero_casa)} - ${E(o.bairro)}</div>
-    ${o.complemento ? `<div class="ref">Comp: ${E(o.complemento)}</div>` : ""}
-    ${o.referencia ? `<div class="ref">Ref: ${E(o.referencia)}</div>` : ""}
-    <ul class="its">${itens}</ul>
-    <div class="val">
-      ${R(o.total)}
-      <small>${E(pagTxt)}${E(troco)}</small>
-    </div>
-    <div class="row">
-      <a class="btn wa" href="${waU(o)}" target="_blank" rel="noopener">💬 WhatsApp</a>
-      <a class="btn mp" href="${mapU(o)}" target="_blank" rel="noopener">🗺️ Mapa</a>
-      <button class="btn ok ${pago ? "" : "c"}" onclick="entregar('${o.id}', '${E(o.numero)}')">
-        ${pago ? "✅ Confirmar Entrega" : "💰 Recebi e Entreguei"}
-      </button>
-    </div>
-  </div>`;
-}
-
-function draw() {
-  if (!U) {
-    $("app").innerHTML = `<div class="empty">${LMSG ? `<span style="color:var(--pri)">${E(LMSG)}</span>` : "Conectando ao sistema..."}</div>`;
-    return;
-  }
-  if (!L.length) {
-    $("app").innerHTML = `<div class="empty">Nenhuma entrega pendente no momento.<br><small>Aguardando novos pedidos...</small></div>`;
-    return;
-  }
-$("app").innerHTML = <div class="cnt">${L.length} entrega(s) na rota</div> + L.map(cardH).join("");
-}
-// Conecta automaticamente ao abrir a página
-async function autoConnect() {
-const {data} = await sb.auth.getSession();
-if (data.session?.user) {
-await start(data.session.user);
-return;
-}
-const r = await sb.auth.signInWithPassword({ email: AUTO_EMAIL, password: AUTO_PASS });
-if (r.error) {
-LMSG = "Erro de conexão automática: verifique o usuário/senha no Supabase.";
-draw();
-return;
-}
-await start(r.data.user);
-}
-autoConnect();
+function tocarSomMarioPipe(){try{const A=window.AudioContext||window.webkitAudioContext;ac=ac||new A();if(ac.state=="suspended")ac.resume();const t0=ac.currentTime+.02;
+// som do cano verde (warp pipe): 3 pulsos descendentes
+[[740,330],[587,262],[440,196]].forEach(([f1,f2],i)=>{const t=t0+i*.17,o=ac.createOscillator(),g=ac.createGain();o.type="square";o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+.14);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.12,t+.01);g.gain.setValueAtTime(.12,t+.11);g.gain.exponentialRampToValueAtTime(.0001,t+.15);o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+.16)})}catch(e){}}
+function setSom(v){SOM=v;const b=$("bs");b.textContent="🔔 Som: "+(SOM?"ligado":"desligado");b.classList.toggle("on",SOM)}
+function togSom(){setSom(!SOM);tocarSomMarioPipe()}
+// ---------- login (e-mail fixo + senha) e definição de senha
+function loginH(){return`<div class="box"><h2 style="margin-top:0">🛵 Entregas</h2><form onsubmit="return login(event)"><label for="em">E-mail</label><input id="em" type="email" autocomplete="username" value="${LOGIN_EMAIL}" required><label for="pw">Senha</label><input id="pw" type="password" autocomplete="current-password" required><button class="btn dk" type="submit">Entrar</button></form><button class="btn" type="button" onclick="enviarLink()">🔑 Definir / esqueci a senha</button><p class="msg ${LOK?"good":"err"}">${E(LMSG)}</p></div>`}
+function pwH(){const rec=PW=="rec";return`<div class="box"><h2 style="margin-top:0">🔑 Definir senha</h2>${rec?"":`<small style="color:var(--mut)">Conectado como ${E(U&&U.email)}</small>`}<form onsubmit="return salvarSenha(event)"><label for="n1">Nova senha (mínimo 6 caracteres)</label><input id="n1" type="password" autocomplete="new-password" minlength="6" required><label for="n2">Repita a nova senha</label><input id="n2" type="password" autocomplete="new-password" minlength="6" required><button class="btn dk" type="submit">Salvar senha</button></form>${rec?"":`<button class="btn" type="button" onclick="PW='';LMSG='';draw()">Cancelar</button>`}<p class="msg ${LOK?"good":"err"}">${E(LMSG)}</p></div>`}
+function abrirSenha(m){PW=m;LMSG="";LOK=false;draw()}
+async function login(ev){ev.preventDefault();LMSG="Entrando…";LOK=true;draw();const email=$("em").value.trim().toLowerCase(),pw=$("pw").value;
+const r=await sb.auth.signInWithPassword({email,password:pw});if(r.error){LMSG="E-mail ou senha incorretos. Se ainda não definiu a senha, toque em “Definir / esqueci a senha”.";LOK=false;draw();return false}
+tocarSomMarioPipe();await start(r.data.user);return false}
+async function enviarLink(){const el=$("em"),email=((el&&el.value)||LOGIN_EMAIL).trim().toLowerCase();if(!email){LMSG="Informe o e-mail.";LOK=false;draw();return}
+LMSG="Enviando…";LOK=true;draw();
+const r=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
+if(r.error){LMSG="Não foi possível enviar: "+r.error.message;LOK=false}else{LMSG="Enviamos um link para "+email+". Abra o e-mail neste aparelho, toque no link e defina a senha.";LOK=true}draw()}
+async function salvarSenha(ev){ev.preventDefault();const a=$("n1").value,b=$("n2").value;
+if(a.length<6){LMSG="Use pelo menos 6 caracteres.";LOK=false;draw();return false}
+if(a!==b){LMSG="As senhas não são iguais.";LOK=false;draw();return false}
+const r=await sb.auth.updateUser({password:a});
+if(r.error){LMSG="Erro: "+r.error.message;LOK=false;draw();return false}
+const rec=PW=="rec";PW="";LMSG="";LOK=false;try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+tst("Senha definida com sucesso ✔");
+if(rec||!U){const s=await sb.auth.getSession();if(s.data&&s.data.session){await start(s.data.session.user);return false}}
+draw();return false}
+async function start(u){const s=await sb.from("staff").select("user_id,papel").eq("user_id",u.id).maybeSingle();if(!s.data){await sb.auth.signOut();U=null;LMSG="Esta conta não tem acesso. Peça para cadastrá-la na equipe da loja.";LOK=false;draw();return}U=u;LMSG="";draw();setSom(true);await load();subRT()}
+async function sair(){await sb.auth.signOut();U=null;L=[];SEEN=null;PW="";draw()}
+// ---------- dados: pedidos de delivery prontos para entrega (status "saiu")
+async function load(){const r=await sb.from("pedidos").select("*, pedido_itens(*)").eq("tipo","delivery").eq("status","saiu").order("criado_em",{ascending:true});
+if(r.error){tst("Erro ao carregar: "+r.error.message);return}
+L=r.data.filter(o=>o.arquivado!==true);
+const ids=new Set(L.map(o=>o.id));if(SEEN&&SOM&&[...ids].some(i=>!SEEN.has(i)))tocarSomMarioPipe();SEEN=ids;draw()}
+function subRT(){if(RT)return;RT=sb.channel("moto").on("postgres_changes",{event:"*",schema:"public",table:"pedidos"},()=>{clearTimeout(subRT.t);subRT.t=setTimeout(()=>{if(U)load()},400)}).subscribe();setInterval(()=>{if(U&&!busy&&!PW)load()},15000)}
+const mapU=o=>o.localizacao?"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(o.localizacao):"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(`${o.endereco}, ${o.numero_casa} - ${o.bairro}`);
+const waU=o=>{let d=dg(o.telefone);if(d.length<=11)d="55"+d;return"https://wa.me/"+d+"?text="+encodeURIComponent(`Olá, ${o.nome}! Sou o entregador do pedido #${o.numero}, estou a caminho.`)};
+const itLi=i=>`<li><b>${i.qtd}x</b> ${E(i.nome)}${(i.complementos||[]).length?` <small>+ ${E(i.complementos.map(c=>c.nome).join(", "))}</small>`:""}${i.observacao?`<em>⚠ ${E(i.observacao)}</em>`:""}</li>`;
+function card(o){const pago=!!o.pago,cd=CF==o.id;return`<div class="card"><div class="top"><span class="num">#${o.numero}</span><span class="badge ${pago?"pago":"cob"}">${pago?"PAGO":"COBRAR"}</span></div>
+<div class="cli">${E(o.nome)}</div><div>${E(o.telefone)}</div>
+<div class="addr">📍 ${E(o.endereco)}, ${E(o.numero_casa)} - ${E(o.bairro)}</div>${o.referencia?`<div class="ref">Ref.: ${E(o.referencia)}</div>`:""}
+<ul class="its">${(o.pedido_itens||[]).map(itLi).join("")}</ul>${o.observacao?`<div class="ref">Obs.: ${E(o.observacao)}</div>`:""}
+<div class="val">${pago?"Nada a cobrar":"Cobrar "+R(o.total)}<small>${E(PAG[o.pagamento]||"")}${o.pagamento=="dinheiro"&&+o.troco?" · troco para "+R(o.troco):""}</small></div>
+<div class="row"><a class="btn wa" href="${waU(o)}" target="_blank" rel="noopener">💬 WhatsApp</a><a class="btn mp" href="${mapU(o)}" target="_blank" rel="noopener">🗺️ Abrir no Google Maps</a>
+<button class="btn ok ${cd?"c":""}" onclick="conf('${o.id}')">${cd?"Toque de novo para confirmar":"✔ Confirmar Entrega"}</button></div></div>`}
+async function conf(id){if(CF!==id){CF=id;draw();setTimeout(()=>{if(CF==id){CF="";draw()}},5000);return}
+CF="";busy=true;try{await upd(id,{status:"concluido",pronto:true});tst("Entrega confirmada ✔")}catch(e){tst("Erro: "+(e.message||e))}busy=false;await load()}
+function draw(){const hd=$("hd");hd.style.display=(U&&PW!="rec")?"flex":"none";
+if(PW){$("app").innerHTML=pwH();return}
+$("app").innerHTML=U?`<div class="cnt">${L.length?L.length+(L.length==1?" entrega disponível":" entregas disponíveis"):""}</div>${L.map(card).join("")||'<div class="empty">Nenhuma entrega disponível agora.<br><small>A lista atualiza sozinha.</small></div>'}`:loginH()}
+// link de recuperação aberto: mostra a tela de nova senha
+sb.auth.onAuthStateChange(ev=>{if(ev=="PASSWORD_RECOVERY"){PW="rec";LMSG="";draw()}});
+(async()=>{try{const s=await sb.auth.getSession();if(s.data&&s.data.session&&PW!="rec"){await start(s.data.session.user);return}}catch(e){}draw()})();
+</script>
+</body>
+</html>
