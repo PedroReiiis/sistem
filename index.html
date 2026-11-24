@@ -134,6 +134,27 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .tl{display:flex;gap:4px;margin-top:8px}.tl span{flex:1;text-align:center;font-size:12px;padding:6px 2px;border-radius:6px;background:var(--bg);color:var(--mut)}.tl span.on{background:var(--ok);color:#fff}
 .lj h1{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 
+/* ===== modal "Onde vamos entregar?" ===== */
+.ov.c{align-items:center;padding:16px}
+.dm{background:#fff!important;color:#111827;width:100%;max-width:440px;max-height:92vh;overflow:auto;border-radius:16px;padding:22px 20px 18px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.dm h3{margin:0 0 14px;text-align:center;font-size:20px;font-weight:800;color:#111827;border:0;padding:0}
+.dm label{display:block;font-size:13px;font-weight:700;color:#374151;margin:10px 0 4px}
+.dm input{width:100%;padding:12px 14px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;color:#111827;font-size:15px;margin:0;outline:none;transition:border-color .15s,box-shadow .15s}
+.dm input:focus{border-color:#991b1b;box-shadow:0 0 0 3px rgba(153,27,27,.15)}
+.dm input.bad{border-color:#dc2626}
+.dm .loc{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:auto;padding:14px 16px;border:0;border-radius:12px;background:linear-gradient(135deg,#b91c1c,#991b1b);color:#fff;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(153,27,27,.35);transition:transform .15s,box-shadow .15s,filter .15s}
+.dm .loc:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(153,27,27,.4);filter:brightness(1.06)}
+.dm .loc:active{transform:translateY(0)}
+.lpill{display:flex;align-items:center;justify-content:center;gap:6px;margin:10px auto 0;width:fit-content;max-width:100%;padding:7px 14px;border-radius:999px;background:#dcfce7;border:1px solid #86efac;color:#166534;font-size:13px;font-weight:700;text-align:center;animation:pin .35s ease-out both}
+.lpill.w{background:#fef3c7;border-color:#fcd34d;color:#92400e}
+@keyframes pin{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.lpill{animation:none}}
+.dm .priv{margin:14px 0 12px;text-align:center;font-size:12px;color:#6b7280}
+.dm .conf{width:100%;height:auto;padding:14px;border:0;border-radius:10px;background:#1f2937;color:#fff;font-size:16px;font-weight:800;cursor:pointer}
+.dm .conf:hover{background:#111827}
+.dm .alt{display:block;margin:10px auto 0;background:none;border:0;color:#6b7280;font-size:13px;text-decoration:underline;cursor:pointer}
+.dm .err{margin:10px 0 0;text-align:center;color:#b91c1c;font-size:13px;font-weight:700}
+
 </style>
 </head>
 <body>
@@ -187,16 +208,29 @@ function op(k){const x=all[k],ks=x.v?Object.keys(x.v):[];S.sh={k,sel:{},obs:"",q
 function pk(gid,i){const s=S.sh,g=S.cg.find(g=>g.id==gid),a=s.sel[gid]||(s.sel[gid]=[]),j=a.indexOf(i);if(j>=0)a.splice(j,1);else if(g.max==1){a.length=0;a.push(i)}else if(a.length<g.max)a.push(i);render()}
 function sq(d){S.sh.q=Math.max(1,S.sh.q+d);render()}
 function addL(){const s=S.sh,x=all[s.k];if(!okSel(x,s))return;S.lines.push({k:s.k,v:s.v||null,sel:JSON.parse(JSON.stringify(s.sel)),obs:s.obs.trim(),q:s.q});S.sh=null;render()}
-function loc(){if(!navigator.geolocation){S.lm="Este navegador não permite localização. Use outro navegador ou fale com a loja.";return render()}
-navigator.geolocation.getCurrentPosition(p=>{S.f.loc=p.coords.latitude.toFixed(6)+","+p.coords.longitude.toFixed(6);S.lm="";render()},()=>{S.lm="Não foi possível obter a localização. Libere o acesso à localização no navegador e tente de novo.";render()},{enableHighAccuracy:true,timeout:10000})}
+function loc(){S.lok=0;if(!navigator.geolocation){S.lm="Seu navegador não permite localização. Sem problema: preencha o bairro manualmente.";return render()}
+navigator.geolocation.getCurrentPosition(p=>{S.f.loc=p.coords.latitude.toFixed(6)+","+p.coords.longitude.toFixed(6);S.lm="";S.lok=1;render()},()=>{S.lm="Não conseguimos sua localização. Sem problema: preencha o bairro manualmente.";render()},{enableHighAccuracy:true,timeout:10000})}
 function cpk(){const k=CFG.pix_chave;if(!k){S.lm="A chave PIX ainda não foi cadastrada. Peça à loja.";return render()}try{navigator.clipboard.writeText(k).then(()=>{S.lm="Chave PIX copiada ✔";render()},()=>{S.lm="Não deu para copiar. Copie a chave acima.";render()})}catch(e){S.lm="Copie a chave acima.";render()}}
 const inp=(k,l,t="text")=>`<label>${l}</label><input type="${t}" value="${E(S.f[k])}" oninput="S.f.${k}=this.value">`;
-const ck=()=>{const f=S.f,d=f.tipo!="retirada",tx=fee(),fs=feeSt(),ds=desc(),T=tot()-ds+tx;
+const tm=s=>{const d=(s||"").replace(/\D/g,"").slice(0,11);return d.length>10?`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`:d.length>6?`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`:d.length>2?`(${d.slice(0,2)}) ${d.slice(2)}`:d.length?`(${d}`:""};
+function mk(el){el.value=tm(el.value);S.f.tel=el.value}
+const dm=()=>{const f=S.f,b=!!S.dv;return`<div class="ov c" onclick="if(event.target==this){S.ck=0;render()}"><div class="dm" role="dialog" aria-modal="true" aria-labelledby="dmt"><h3 id="dmt">Onde vamos entregar?</h3>
+<button class="loc" type="button" onclick="loc()">📍 Usar minha localização atual</button>
+${S.lok&&f.loc?`<div class="lpill" role="status">✅ Localização capturada com sucesso!</div>`:S.lm?`<div class="lpill w" role="status">⚠️ ${E(S.lm)}</div>`:""}
+<label for="dn">Nome</label><input id="dn" class="${b&&!(f.nome||"").trim()?"bad":""}" placeholder="Como podemos te chamar?" autocomplete="name" value="${E(f.nome)}" oninput="S.f.nome=this.value">
+<label for="dt">Telefone (WhatsApp)</label><input id="dt" class="${b&&dg(f.tel).length<10?"bad":""}" type="tel" inputmode="numeric" maxlength="15" placeholder="(65) 99999-9999" autocomplete="tel" value="${E(tm(f.tel))}" oninput="mk(this)">
+<label for="db">Bairro</label><input id="db" class="${b&&!(f.bairro||"").trim()?"bad":""}" placeholder="Digite seu bairro" autocomplete="address-level2" value="${E(f.bairro)}" oninput="S.f.bairro=this.value">
+${S.dv?`<div class="err" role="alert">${E(S.dv)}</div>`:""}
+<p class="priv">🔒 Usamos sua localização e telefone apenas para calcular a entrega e avisar quando o pedido sair.</p>
+<button class="conf" type="button" onclick="dconf()">Confirmar</button>
+<button class="alt" type="button" onclick="S.f.tipo='retirada';S.lm='';render()">Prefiro retirar no balcão</button></div></div>`};
+function dconf(){const f=S.f;if(!(f.nome||"").trim()||dg(f.tel).length<10||!(f.bairro||"").trim()){S.dv="Preencha nome, telefone com DDD e bairro para continuar.";return render()}
+S.dv="";f.nome=f.nome.trim();f.bairro=f.bairro.trim();f.dd=1;S.lm="";render()}
+const ck=()=>{const f=S.f,d=f.tipo!="retirada";if(d&&!f.dd)return dm();const tx=fee(),fs=feeSt(),ds=desc(),T=tot()-ds+tx;
 return`<div class="ov" onclick="if(event.target==this){S.ck=0;render()}"><div class="sh"><h3 style="margin-top:0">Resumo do pedido</h3>${bag()}<div class="r"><span class="tx">Subtotal</span><b>${R(tot())}</b></div>
 <label style="display:block;margin-top:8px">Observações do pedido</label><textarea rows="2" placeholder="Ex.: mandar sachês" oninput="S.f.obs=this.value">${E(f.obs)}</textarea>
 <h4 style="margin:14px 0 6px">Como você quer receber?</h4><div class="seg"><button class="${d?"on":""}" onclick="S.f.tipo='delivery';render()">Delivery</button><button class="${d?"":"on"}" onclick="S.f.tipo='retirada';render()">Retirada no balcão</button></div>
-${inp("nome","Nome")}${inp("tel","WhatsApp com DDD","tel").replace('<input ','<input onchange="render()" ')}
-${d?`${inp("end","Endereço")}${inp("num","Número")}${inp("bairro","Bairro")}${inp("ref","Ponto de referência")}<button class="b" onclick="loc()">📍 Usar minha localização</button><small style="color:var(--mut)">${f.loc?"Localização anexada ✔":"O navegador vai pedir sua permissão. Usamos telefone, endereço e localização só para entregar o pedido."}</small>`:""}
+${d?`<div class="r" style="margin-top:12px;align-items:flex-start"><span class="tx"><b>${E(f.nome)}</b> · ${E(tm(f.tel))}<br><small>Bairro: ${E(f.bairro)}${f.loc?" · 📍 localização anexada":""}</small></span><button class="x" onclick="S.f.dd=0;S.lm='';render()">Alterar</button></div>${f.loc?"":`<button class="b" onclick="loc()">📍 Usar minha localização</button>`}`:`${inp("nome","Nome")}${inp("tel","WhatsApp com DDD","tel").replace('<input ','<input onchange="render()" ')}`}
 <h4 style="margin:14px 0 6px">Pagamento</h4><div class="seg">${["Pix","Cartão na entrega","Dinheiro"].map(o=>`<button class="${f.pay==o?"on":""}" onclick="S.f.pay='${o}';render()">${o}</button>`).join("")}</div>
 ${f.pay=="Pix"?`<p>Chave PIX: <b>${E(CFG.pix_chave)||"não cadastrada"}</b></p><button class="b" onclick="cpk()">Copiar chave PIX</button><small style="color:var(--mut)">Depois de pagar, a equipe confirma o pagamento.</small>`:""}${f.pay=="Dinheiro"?inp("troco","Troco para quanto?","number"):""}
 ${bal()>0?`<label style="display:block;margin-top:8px"><input type="checkbox" style="width:auto;margin:0 6px 0 0" ${f.usar?"checked":""} onchange="S.f.usar=this.checked;render()">Usar meu cashback (${R(bal())})</label>`:""}
@@ -206,16 +240,16 @@ ${!S.open?`<button class="b" disabled>Loja fechada no momento</button>`:tot()<S.
 const PG={"Pix":"pix","Cartão na entrega":"cartao","Dinheiro":"dinheiro"};
 function wa(t,m){let d=dg(t);if(d.length<=11)d="55"+d;window.open("https://wa.me/"+d+"?text="+encodeURIComponent(m),"_blank")}
 const msgL=o=>{const p=o.payload,d=p.tipo=="delivery";return`🍔 Novo pedido #${o.numero} (${d?"DELIVERY":"RETIRADA"})\nCliente: ${p.nome} - ${p.telefone}\n${d?`Endereço: ${p.endereco}, ${p.numero_casa} - ${p.bairro}`:"Retirada no balcão"}`+(p.referencia?`\nRef.: ${p.referencia}`:"")+(p.localizacao?`\n📍 https://maps.google.com/?q=${p.localizacao}`:"")+`\n\n${o.itens.join("\n")}`+(p.observacao?`\n\nObs.: ${p.observacao}`:"")+`\n\n💰 ${p.pagto} - ${R(o.total)}`+(p.troco?` (troco para ${R(p.troco)})`:"")};
-const ERR=[["loja fechada","A loja está fechada no momento."],["abaixo do minimo","O pedido está abaixo do valor mínimo."],["fora da area","Este endereço está fora da área de entrega."],["localizacao obrigatoria","Compartilhe sua localização para calcular a taxa de entrega."],["indisponivel","Algum item ficou indisponível. Atualize a página e monte o pedido de novo."],["pausada","Uma categoria foi pausada. Atualize a página."],["escolha invalida","Falta escolher uma opção obrigatória de algum item."],["cashback","Para usar o cashback, abra o seu link pessoal."],["endereco incompleto","Preencha endereço, número e bairro."]];
+const ERR=[["loja fechada","A loja está fechada no momento."],["abaixo do minimo","O pedido está abaixo do valor mínimo."],["fora da area","Este endereço está fora da área de entrega."],["localizacao obrigatoria","Compartilhe sua localização para calcular a taxa de entrega."],["indisponivel","Algum item ficou indisponível. Atualize a página e monte o pedido de novo."],["pausada","Uma categoria foi pausada. Atualize a página."],["escolha invalida","Falta escolher uma opção obrigatória de algum item."],["cashback","Para usar o cashback, abra o seu link pessoal."],["endereco incompleto","Preencha nome, telefone e bairro."]];
 const errMsg=m=>(ERR.find(e=>(m||"").includes(e[0]))||[0,"Não foi possível enviar o pedido. Tente de novo em instantes."])[1];
 async function send(){const f=S.f,d=f.tipo!="retirada";if(S.busy)return;
 if(!S.open){S.lm="A loja está fechada no momento.";return render()}
 if(!cnt()){S.lm="Sua sacola está vazia.";return render()}
 if(tot()<S.min){S.lm="O pedido mínimo é "+R(S.min)+".";return render()}
-if(!f.nome||!f.tel||(d&&(!f.end||!f.num||!f.bairro))){S.lm=d?"Preencha nome, telefone, endereço, número e bairro.":"Preencha nome e telefone.";return render()}
+if(!f.nome||!f.tel||(d&&!f.bairro)){S.lm=d?"Preencha nome, telefone e bairro.":"Preencha nome e telefone.";return render()}
 if(d&&feeSt()!="ok"){S.lm=feeSt()=="fora"?"Este endereço está fora da área de entrega.":"Compartilhe sua localização para calcular a taxa de entrega.";return render()}
 const itens=S.lines.map(l=>{const x=all[l.k];return{produto_id:x.id,qtd:l.q,opcao:l.v||null,complementos:gs(x).flatMap(g=>(l.sel[g.id]||[]).map(i=>g.ops[i]).filter(Boolean).map(o=>o.id)),observacao:l.obs||null}});
-const payload={tipo:d?"delivery":"retirada",nome:f.nome,telefone:f.tel,endereco:d?f.end:null,numero_casa:d?f.num:null,bairro:d?f.bairro:null,referencia:d?(f.ref||null):null,localizacao:d?(f.loc||null):null,observacao:f.obs||null,pagamento:PG[f.pay],troco:f.pay=="Dinheiro"&&f.troco?+f.troco:null,itens};
+const payload={tipo:d?"delivery":"retirada",nome:f.nome,telefone:f.tel,endereco:d?(f.end||(f.loc?"Localização compartilhada":"Informado apenas o bairro")):null,numero_casa:d?(f.num||"S/N"):null,bairro:d?f.bairro:null,referencia:d?(f.ref||null):null,localizacao:d?(f.loc||null):null,observacao:f.obs||null,pagamento:PG[f.pay],troco:f.pay=="Dinheiro"&&f.troco?+f.troco:null,itens};
 if(f.usar&&me()){payload.usar_cashback=true;payload.cliente_token=S.cli.token}
 const resumo=ci().map(x=>x.q+"x "+x.n);
 S.busy=1;S.lm="Enviando…";render();
@@ -243,9 +277,9 @@ async function load(){const sel=t=>sb.from(t).select("*");
 const [cf,ct,pr,op,gr,oc,gc,fx,ab]=await Promise.all([sel("config").eq("id",1).single(),sel("categorias").order("ordem"),sel("produtos").order("ordem"),sel("produto_opcoes"),sel("grupos_complemento").order("ordem"),sel("opcoes_complemento").order("ordem"),sel("grupo_categorias"),sel("faixas_entrega").order("km_ate"),sb.rpc("loja_aberta")]);
 for(const r of [cf,ct,pr,op,gr,oc,gc,fx])if(r.error)throw r.error;
 CFG=cf.data;C={};ORD=[];all=[];const cid={};
-ct.data.forEach(c=>{C[c.nome]=[];ORD.push(c.nome);cid[c.id]=c.nome;S.gc[c.nome]=c.gera_cashback});
-pr.data.forEach(p=>{const n=cid[p.categoria_id];if(!n)return;const x={id:p.id,n:p.nome,d:p.descricao||"",p:+p.preco,c:n,img:p.foto_url,dest:p.destaque},o=op.data.filter(y=>y.produto_id==p.id);if(o.length){x.v={};o.forEach(y=>x.v[y.nome]=+y.preco);x.p=Math.min(...Object.values(x.v))}x.k=all.push(x)-1;C[n].push(x)});
-S.cg=gr.data.map(g=>{const cats={};gc.data.filter(y=>y.grupo_id==g.id).forEach(y=>{if(cid[y.categoria_id])cats[cid[y.categoria_id]]=1});return{id:g.id,n:g.nome,req:g.obrigatorio,min:g.min_escolhas,max:g.max_escolhas,cats,ops:oc.data.filter(o=>o.grupo_id==g.id).map(o=>({id:o.id,n:o.nome,p:+o.preco,a:1}))}});
+ct.data.filter(c=>c.ativa!==false).forEach(c=>{C[c.nome]=[];ORD.push(c.nome);cid[c.id]=c.nome;S.gc[c.nome]=c.gera_cashback});
+pr.data.filter(p=>p.ativo!==false).forEach(p=>{const n=cid[p.categoria_id];if(!n)return;const x={id:p.id,n:p.nome,d:p.descricao||"",p:+p.preco,c:n,img:p.foto_url,dest:p.destaque},o=op.data.filter(y=>y.produto_id==p.id);if(o.length){x.v={};o.forEach(y=>x.v[y.nome]=+y.preco);x.p=Math.min(...Object.values(x.v))}x.k=all.push(x)-1;C[n].push(x)});
+S.cg=gr.data.filter(g=>g.ativo!==false).map(g=>{const cats={};gc.data.filter(y=>y.grupo_id==g.id).forEach(y=>{if(cid[y.categoria_id])cats[cid[y.categoria_id]]=1});return{id:g.id,n:g.nome,req:g.obrigatorio,min:g.min_escolhas,max:g.max_escolhas,cats,ops:oc.data.filter(o=>o.grupo_id==g.id).map(o=>({id:o.id,n:o.nome,p:+o.preco,a:o.ativo===false?0:1}))}});
 S.fee={def:+CFG.taxa_entrega_padrao,txt:fx.data.map(f=>f.km_ate+"="+f.taxa).join("\n"),lat:CFG.loja_lat??"",lng:CFG.loja_lng??"",teste:""};
 S.min=+CFG.pedido_minimo;S.tempo={delivery:CFG.tempo_delivery,retirada:CFG.tempo_retirada};S.cb={on:!!CFG.cashback_ativo,pct:+CFG.cashback_pct};S.open=ab.data!==false;
 if(!S.cat||!C[S.cat])S.cat=ORD[0]||"";document.title=CFG.nome_loja||"Cardápio"}
@@ -253,7 +287,8 @@ async function loadCli(){let t=null;const m=(location.hash||"").match(/^#c-([0-9
 if(!t)return;const r=await sb.rpc("meu_cashback",{p_token:t});if(r.data){S.cli={token:t,nome:r.data.nome,tel:r.data.telefone,saldo:+r.data.saldo};if(!S.f.tel){S.f.tel=S.cli.tel;S.f.nome=S.cli.nome||""}}}
 (async()=>{try{await load();await loadCli()}catch(e){document.getElementById("app").innerHTML='<p style="padding:20px">Não foi possível carregar o cardápio agora. Atualize a página em instantes.</p>';return}
 render();trkPoll();setInterval(trkPoll,15000);
-setInterval(async()=>{const r=await sb.rpc("loja_aberta");if(r.data!==null&&r.data!==S.open){S.open=r.data;if(!S.sh&&!S.ck)render()}},60000)})();
+setInterval(async()=>{const r=await sb.rpc("loja_aberta");if(r.data!==null&&r.data!==S.open){S.open=r.data;if(!S.sh&&!S.ck)render()}
+if(!S.lines.length&&!S.sh&&!S.ck&&!S.q){try{const sg=()=>JSON.stringify([ORD,all.map(x=>[x.id,x.n,x.p,x.img,x.d])]),a=sg();await load();if(sg()!==a)render()}catch(e){}}},60000)})();
 
 </script>
 </body>
