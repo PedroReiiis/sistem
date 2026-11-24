@@ -66,6 +66,7 @@ input{width:100%;padding:12px;border:3px solid #000;border-radius:10px;font-size
    ===================================================================== */
 const MOTO_LOGIN = "cryspe2@gmail.com"; // <- login / e-mail fixo do motoboy
 const MOTO_SENHA = "pedroH1212";        // <- senha fixa do motoboy
+const MOTO_EXIGIR_SENHA = false;        // <- false = entra só com o e-mail (sem campo de senha); true = pede a senha
 /* ===================================================================== */
 
 /* Configurações da rota (edite se quiser) */
@@ -95,12 +96,18 @@ function tocarSomMarioPipe(){try{const A=window.AudioContext||window.webkitAudio
 function setSom(v){SOM=v;const b=$("bs");b.textContent="🔔 Som: "+(SOM?"ligado":"desligado");b.classList.toggle("on",SOM)}
 function togSom(){setSom(!SOM);tocarSomMarioPipe()}
 // ---------- login (e-mail fixo + senha) e definição de senha
-function loginH(){return`<div class="box"><h2 style="margin-top:0">🛵 Entregas</h2><form onsubmit="return login(event)"><label for="em">E-mail</label><input id="em" type="email" autocomplete="username" value="${E(LOGIN_EMAIL)}" required><label for="pw">Senha</label><input id="pw" type="password" autocomplete="current-password" required><button class="btn dk" type="submit">Entrar</button></form><button class="btn" type="button" onclick="enviarLink()">🔑 Definir / esqueci a senha</button><p class="msg ${LOK?"good":"err"}">${E(LMSG)}</p></div>`}
+function loginH(){return`<div class="box"><h2 style="margin-top:0">🛵 Entregas</h2><form onsubmit="return login(event)"><label for="em">E-mail</label><input id="em" type="email" autocomplete="username" value="${E(LOGIN_EMAIL)}" required>${MOTO_EXIGIR_SENHA?`<label for="pw">Senha</label><input id="pw" type="password" autocomplete="current-password" required>`:""}<button class="btn dk" type="submit">Entrar</button></form>${MOTO_EXIGIR_SENHA?`<button class="btn" type="button" onclick="enviarLink()">🔑 Definir / esqueci a senha</button>`:""}<p class="msg ${LOK?"good":"err"}">${E(LMSG)}</p></div>`}
 function pwH(){const rec=PW=="rec";return`<div class="box"><h2 style="margin-top:0">🔑 Definir senha</h2>${rec?"":`<small style="color:var(--mut)">Conectado como ${E(U&&U.email)}</small>`}<form onsubmit="return salvarSenha(event)"><label for="n1">Nova senha (mínimo 6 caracteres)</label><input id="n1" type="password" autocomplete="new-password" minlength="6" required><label for="n2">Repita a nova senha</label><input id="n2" type="password" autocomplete="new-password" minlength="6" required><button class="btn dk" type="submit">Salvar senha</button></form>${rec?"":`<button class="btn" type="button" onclick="PW='';LMSG='';draw()">Cancelar</button>`}<p class="msg ${LOK?"good":"err"}">${E(LMSG)}</p></div>`}
 function abrirSenha(m){PW=m;LMSG="";LOK=false;draw()}
-async function login(ev){ev.preventDefault();LMSG="Entrando…";LOK=true;draw();const email=$("em").value.trim().toLowerCase(),pw=$("pw").value;
+async function login(ev){ev.preventDefault();
+// IMPORTANTE: ler os campos ANTES de qualquer draw() (draw recria o formulário e apaga a senha digitada)
+const email=$("em").value.trim().toLowerCase(),pw=($("pw")||{}).value||"";
+const mEl=document.querySelector(".box .msg");if(mEl){mEl.textContent="Entrando…";mEl.className="msg good"}
 // --- conta fixa (hardcoded) do motoboy: confere ANTES do Supabase
-if(email===MOTO_LOGIN.trim().toLowerCase()&&pw===MOTO_SENHA){try{localStorage.setItem(FIXO_KEY,"1")}catch(e){}tocarSomMarioPipe();await startFixo();return false}
+if(email===MOTO_LOGIN.trim().toLowerCase()&&(!MOTO_EXIGIR_SENHA||pw===MOTO_SENHA)){try{localStorage.setItem(FIXO_KEY,"1")}catch(e){}tocarSomMarioPipe();
+if(pw)try{await sb.auth.signInWithPassword({email,password:pw})}catch(e){} // tentativa silenciosa: se a mesma senha existir no Supabase, ganha sessão real (ajuda com RLS); se falhar, segue com a conta fixa
+await startFixo();return false}
+if(!MOTO_EXIGIR_SENHA){LMSG="E-mail não autorizado.";LOK=false;draw();return false}
 const r=await sb.auth.signInWithPassword({email,password:pw});if(r.error){LMSG="E-mail ou senha incorretos. Se ainda não definiu a senha, toque em “Definir / esqueci a senha”.";LOK=false;draw();return false}
 tocarSomMarioPipe();await start(r.data.user);return false}
 async function enviarLink(){const el=$("em"),email=((el&&el.value)||LOGIN_EMAIL).trim().toLowerCase();if(!email){LMSG="Informe o e-mail.";LOK=false;draw();return}
