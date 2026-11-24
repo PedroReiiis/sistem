@@ -137,7 +137,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 </style>
 </head>
 <body>
-<header><b>Cardápio</b><div class="acc"><button class="ib" onclick="zm(-1)" aria-label="Diminuir letra">A−</button><button class="ib" onclick="zm(1)" aria-label="Aumentar letra">A+</button><button class="ib" onclick="ct()" aria-label="Alto contraste">◑</button><button class="ib" onclick="th()" aria-label="Alternar modo claro e escuro">🌓</button></div></header>
+<header><b id="sec" onclick="sc()" style="user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;cursor:default">Cardápio</b><div class="acc"><button class="ib" onclick="zm(-1)" aria-label="Diminuir letra">A−</button><button class="ib" onclick="zm(1)" aria-label="Aumentar letra">A+</button><button class="ib" onclick="ct()" aria-label="Alto contraste">◑</button><button class="ib" onclick="th()" aria-label="Alternar modo claro e escuro">🌓</button></div></header>
 <main id="app"><p style="padding:20px">Carregando cardápio…</p></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
@@ -232,6 +232,8 @@ if(cnt())h+=`<div class="bar"><span>🛒 ${cnt()} ${cnt()==1?"item":"itens"} · 
 return h+(S.sh?sheet():"")+(S.ck?ck():"")}
 function render(){const y=scrollY,m0=document.querySelector(".sh"),st0=m0?m0.scrollTop:0;document.getElementById("app").innerHTML=vC();
 document.documentElement.style.setProperty("--hh",document.querySelector("header").offsetHeight+"px");scrollTo(0,y);const m1=document.querySelector(".sh");if(m1)m1.scrollTop=st0}
+// passagem secreta: 3 cliques seguidos em "Cardápio" no cabeçalho abrem o painel
+let SCn=0,SCt;function sc(){SCn++;clearTimeout(SCt);SCt=setTimeout(()=>{SCn=0},1000);if(SCn>=3){SCn=0;location.href="painel.html"}}
 let Z=1;function zm(d){Z=Math.min(1.4,Math.max(.9,Z+d*.1));document.documentElement.style.setProperty("--z",Z)}
 function ct(){const r=document.documentElement;r.dataset.c=r.dataset.c=="1"?"0":"1"}
 function th(){const r=document.documentElement,c=r.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");r.dataset.theme=c=="dark"?"light":"dark"}
