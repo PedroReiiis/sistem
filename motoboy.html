@@ -1,202 +1,511 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="robots" content="noindex,nofollow">
-<title>Entregas</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#fff;--tx:#000;--mut:#333;--line:#000;--pri:#B00020;--ok:#0A7A2F;--blue:#0B4FC4;--warn:#FFD400;--waze:#33CCFF}
-*{box-sizing:border-box}
-body{margin:0;background:#EDEDED;color:var(--tx);font:17px/1.4 Nunito,system-ui,sans-serif;font-weight:700}
-button,input{font-family:inherit}
-header{position:sticky;top:0;z-index:5;background:#000;color:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-header b{font-size:22px;font-weight:900;margin-right:auto}
-header button,header a{background:#fff;color:#000;border:0;border-radius:10px;padding:10px 12px;font-weight:900;font-size:14px;text-decoration:none;cursor:pointer}
-header button.on{background:var(--ok);color:#fff}
-main{max-width:640px;margin:0 auto;padding:12px 12px calc(40px + env(safe-area-inset-bottom,0px))}
-.cnt{font-size:15px;color:var(--mut);margin:4px 2px 10px}
-.card{background:var(--bg);border:3px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.num{font-size:34px;font-weight:900}
-.badge{border-radius:10px;padding:6px 12px;font-weight:900;font-size:16px}
-.badge.pago{background:var(--ok);color:#fff}
-.badge.cob{background:var(--warn);color:#000;border:2px solid #000}
-.cli{font-size:22px;font-weight:900;margin-top:6px}
-.addr{font-size:19px;margin:6px 0;font-weight:800}
-.ref{color:var(--mut);font-size:15px}
-.its{list-style:none;margin:10px 0;padding:10px 0;border-top:2px dashed #000;border-bottom:2px dashed #000;font-size:18px}
-.its li{padding:2px 0}.its em{display:block;font-style:normal;font-size:15px;background:#000;color:#fff;border-radius:6px;padding:2px 8px;margin:2px 0;width:fit-content}
-.val{font-size:26px;font-weight:900;margin:6px 0}
-.val small{display:block;font-size:15px;font-weight:700;color:var(--mut)}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
-.btn{display:flex;align-items:center;justify-content:center;gap:6px;min-height:56px;border-radius:14px;border:3px solid #000;background:#fff;color:#000;font-size:17px;font-weight:900;text-decoration:none;cursor:pointer;padding:0 8px;width:100%}
-.btn.wa{background:#25D366}
-.btn.mp{background:var(--blue);color:#fff}
-.btn.wz{background:var(--waze);color:#000;grid-column:1/-1}
-.btn.ok{grid-column:1/-1;min-height:68px;font-size:21px;background:var(--ok);color:#fff}
-.btn.ok.c{background:var(--warn);color:#000}
-.btn.dk{background:#000;color:#fff}
-.btn:disabled{opacity:.5}
-.opt{background:#fff;border:3px solid #000;border-radius:16px;padding:12px;margin-bottom:14px}
-.opt .btn{min-height:52px}
-.opt .sum{margin-top:8px;font-size:16px}
-.opt .sum b{font-size:20px;font-weight:900}
-.box{background:#fff;border:3px solid #000;border-radius:16px;padding:16px;max-width:380px;margin:40px auto}
-.box .btn{margin-top:8px}
-label{display:block;font-size:15px}
-input{width:100%;padding:12px;border:3px solid #000;border-radius:10px;font-size:17px;margin:4px 0 12px}
-.msg{margin:10px 0 0;font-size:15px}
-.msg.err{color:var(--pri)}.msg.good{color:var(--ok)}
-.empty{text-align:center;padding:40px 10px;font-size:20px;color:var(--mut)}
-#toast{display:none;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#000;color:#fff;padding:12px 18px;border-radius:10px;z-index:30;max-width:92vw}
-</style>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+   <meta name="robots" content="noindex,nofollow">
+   <title>Entregas</title>
+   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+   <style>
+      :root {
+         --bg: #fff;
+         --tx: #000;
+         --mut: #333;
+         --line: #000;
+         --pri: #B00020;
+         --ok: #0A7A2F;
+         --blue: #0B4FC4;
+         --warn: #FFD400;
+         --waze: #33CCFF
+      }
+
+      * {
+         box-sizing: border-box
+      }
+
+      body {
+         margin: 0;
+         background: #EDEDED;
+         color: var(--tx);
+         font: 17px/1.4 Nunito, system-ui, sans-serif;
+         font-weight: 700
+      }
+
+      button,
+      input {
+         font-family: inherit
+      }
+
+      header {
+         position: sticky;
+         top: 0;
+         z-index: 5;
+         background: #000;
+         color: #fff;
+         padding: calc(10px + env(safe-area-inset-top, 0px)) 12px 10px;
+         display: flex;
+         align-items: center;
+         gap: 8px;
+         flex-wrap: wrap
+      }
+
+      header b {
+         font-size: 22px;
+         font-weight: 900;
+         margin-right: auto
+      }
+
+      header button,
+      header a {
+         background: #fff;
+         color: #000;
+         border: 0;
+         border-radius: 10px;
+         padding: 10px 12px;
+         font-weight: 900;
+         font-size: 14px;
+         text-decoration: none;
+         cursor: pointer
+      }
+
+      header button.on {
+         background: var(--ok);
+         color: #fff
+      }
+
+      main {
+         max-width: 640px;
+         margin: 0 auto;
+         padding: 12px 12px calc(40px + env(safe-area-inset-bottom, 0px))
+      }
+
+      .cnt {
+         font-size: 15px;
+         color: var(--mut);
+         margin: 4px 2px 10px
+      }
+
+      .card {
+         background: var(--bg);
+         border: 3px solid var(--line);
+         border-radius: 16px;
+         padding: 14px;
+         margin-bottom: 14px
+      }
+
+      .top {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         gap: 8px
+      }
+
+      .num {
+         font-size: 34px;
+         font-weight: 900
+      }
+
+      .badge {
+         border-radius: 10px;
+         padding: 6px 12px;
+         font-weight: 900;
+         font-size: 16px
+      }
+
+      .badge.pago {
+         background: var(--ok);
+         color: #fff
+      }
+
+      .badge.cob {
+         background: var(--warn);
+         color: #000;
+         border: 2px solid #000
+      }
+
+      .cli {
+         font-size: 22px;
+         font-weight: 900;
+         margin-top: 6px
+      }
+
+      .addr {
+         font-size: 19px;
+         margin: 6px 0;
+         font-weight: 800
+      }
+
+      .ref {
+         color: var(--mut);
+         font-size: 15px
+      }
+
+      .its {
+         list-style: none;
+         margin: 10px 0;
+         padding: 10px 0;
+         border-top: 2px dashed #000;
+         border-bottom: 2px dashed #000;
+         font-size: 18px
+      }
+
+      .its li {
+         padding: 2px 0
+      }
+
+      .its em {
+         display: block;
+         font-style: normal;
+         font-size: 15px;
+         background: #000;
+         color: #fff;
+         border-radius: 6px;
+         padding: 2px 8px;
+         margin: 2px 0;
+         width: fit-content
+      }
+
+      .val {
+         font-size: 26px;
+         font-weight: 900;
+         margin: 6px 0
+      }
+
+      .val small {
+         display: block;
+         font-size: 15px;
+         font-weight: 700;
+         color: var(--mut)
+      }
+
+      .row {
+         display: grid;
+         grid-template-columns: 1fr 1fr;
+         gap: 10px;
+         margin-top: 8px
+      }
+
+      .btn {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         gap: 6px;
+         min-height: 56px;
+         border-radius: 14px;
+         border: 3px solid #000;
+         background: #fff;
+         color: #000;
+         font-size: 17px;
+         font-weight: 900;
+         text-decoration: none;
+         cursor: pointer;
+         padding: 0 8px;
+         width: 100%
+      }
+
+      .btn.wa {
+         background: #25D366
+      }
+
+      .btn.mp {
+         background: var(--blue);
+         color: #fff
+      }
+
+      .btn.wz {
+         background: var(--waze);
+         color: #000;
+         grid-column: 1/-1
+      }
+
+      .btn.ok {
+         grid-column: 1/-1;
+         min-height: 68px;
+         font-size: 21px;
+         background: var(--ok);
+         color: #fff
+      }
+
+      .btn.ok.c {
+         background: var(--warn);
+         color: #000
+      }
+
+      .btn.dk {
+         background: #000;
+         color: #fff
+      }
+
+      .btn:disabled {
+         opacity: .5
+      }
+
+      .opt {
+         background: #fff;
+         border: 3px solid #000;
+         border-radius: 16px;
+         padding: 12px;
+         margin-bottom: 14px
+      }
+
+      .opt .btn {
+         min-height: 52px
+      }
+
+      .opt .sum {
+         margin-top: 8px;
+         font-size: 16px
+      }
+
+      .opt .sum b {
+         font-size: 20px;
+         font-weight: 900
+      }
+
+      .box {
+         background: #fff;
+         border: 3px solid #000;
+         border-radius: 16px;
+         padding: 16px;
+         max-width: 380px;
+         margin: 40px auto
+      }
+
+      .box .btn {
+         margin-top: 8px
+      }
+
+      label {
+         display: block;
+         font-size: 15px
+      }
+
+      input {
+         width: 100%;
+         padding: 12px;
+         border: 3px solid #000;
+         border-radius: 10px;
+         font-size: 17px;
+         margin: 4px 0 12px
+      }
+
+      .msg {
+         margin: 10px 0 0;
+         font-size: 15px
+      }
+
+      .msg.err {
+         color: var(--pri)
+      }
+
+      .msg.good {
+         color: var(--ok)
+      }
+
+      .empty {
+         text-align: center;
+         padding: 40px 10px;
+         font-size: 20px;
+         color: var(--mut)
+      }
+
+      #toast {
+         display: none;
+         position: fixed;
+         bottom: 16px;
+         left: 50%;
+         transform: translateX(-50%);
+         background: #000;
+         color: #fff;
+         padding: 12px 18px;
+         border-radius: 10px;
+         z-index: 30;
+         max-width: 92vw
+      }
+   </style>
 </head>
+
 <body>
-<header id="hd" style="display:none"><b>🛵 Entregas</b><button id="bs" onclick="togSom()">🔔 Som: desligado</button><button onclick="load()">↻ Atualizar</button><button id="bsn" onclick="abrirSenha('chg')">🔑 Senha</button><button onclick="sair()">Sair</button></header>
-<main id="app"></main>
-<div id="toast"></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script>
-/* =====================================================================
-   CONTA FIXA DO MOTOBOY (hardcoded) — EDITE AQUI QUANDO QUISER
-   Texto simples, sem hash, sem banco. Qualquer pessoa que abrir o
-   "código-fonte" da página consegue ler estes valores.
-   ===================================================================== */
-const MOTO_LOGIN = "cryspe2@gmail.com"; // <- login / e-mail fixo do motoboy
-const MOTO_SENHA = "pedroH1212";        // <- senha fixa do motoboy
-const MOTO_EXIGIR_SENHA = false;        // <- false = entra só com o e-mail (sem campo de senha); true = pede a senha
-/* ===================================================================== */
+   <header id="hd" style="display:none"><b>🛵 Entregas</b><button id="bs" onclick="togSom()">🔔 Som:
+         desligado</button><button onclick="load()">↻ Atualizar</button><button id="bsn" onclick="abrirSenha('chg')">🔑
+         Senha</button><button onclick="sair()">Sair</button></header>
+   <main id="app"></main>
+   <div id="toast"></div>
+   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+   <script>
+      /* =====================================================================
+         CONTA FIXA DO MOTOBOY (hardcoded) — EDITE AQUI QUANDO QUISER
+         Texto simples, sem hash, sem banco. Qualquer pessoa que abrir o
+         "código-fonte" da página consegue ler estes valores.
+         ===================================================================== */
+      const MOTO_LOGIN = "cryspe2@gmail.com"; // <- login / e-mail fixo do motoboy
+      const MOTO_SENHA = "pedroH1212";        // <- senha fixa do motoboy
+      const MOTO_EXIGIR_SENHA = false;        // <- false = entra só com o e-mail (sem campo de senha); true = pede a senha
+      /* ===================================================================== */
 
-/* Configurações da rota (edite se quiser) */
-const LOJA = null;                       // origem de reserva, ex.: {lat:-15.6014,lng:-56.0979}. null = sem origem fixa
-const GEO_SUFIXO = "Cuiabá, MT, Brasil"; // acrescentado ao endereço ao geocodificar (Nominatim/OpenStreetMap)
+      /* Configurações da rota (edite se quiser) */
+      const LOJA = null;                       // origem de reserva, ex.: {lat:-15.6014,lng:-56.0979}. null = sem origem fixa
+      const GEO_SUFIXO = "Cuiabá, MT, Brasil"; // acrescentado ao endereço ao geocodificar (Nominatim/OpenStreetMap)
 
-const SB_URL="https://rawoxuhvluluvxyyqwud.supabase.co",SB_KEY="sb_publishable_WBNR6zdxRl7b2BjhFUwDbw_345oI6pa";
-const sb=supabase.createClient(SB_URL,SB_KEY);
-const R=v=>"R$ "+Number(v||0).toFixed(2).replace(".",","),E=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])),dg=t=>(t||"").replace(/\D/g,"");
-const $=id=>document.getElementById(id);
-const PAG={pix:"Pix",cartao:"Cartão na entrega",dinheiro:"Dinheiro"};
-const LOGIN_EMAIL=MOTO_LOGIN;
-const FIXO_KEY="dfm_moto_fixo";
-let U=null,L=[],SOM=false,SEEN=null,CF="",LMSG="",LOK=false,RT=null,busy=false,PW=/type=recovery/.test(location.hash)?"rec":"";
-let ORD=null,OPT=null,OPTBUSY=false; // ordem otimizada, resumo da rota, estado do botão
-const tst=m=>{const e=$("toast");e.textContent=m;e.style.display="block";clearTimeout(tst.t);tst.t=setTimeout(()=>e.style.display="none",5000)};
-// fallback seguro para colunas opcionais
-const lsAdd=(k,id)=>{try{const a=JSON.parse(localStorage.getItem(k)||"[]");if(!a.includes(id)){a.push(id);localStorage.setItem(k,JSON.stringify(a.slice(-500)))}}catch(e){}};
-async function upd(id,patch){const r=await sb.from("pedidos").update(patch).eq("id",id);if(!r.error)return;
-if("pronto" in patch&&/column|schema|pronto/i.test(r.error.message||"")){const p2={...patch};delete p2.pronto;lsAdd("dfm_pronto",id);const r2=await sb.from("pedidos").update(p2).eq("id",id);if(r2.error)throw r2.error;return}
-throw r.error}
-// som Super Mario (warp pipe) — Web Audio
-let ac;
-function tocarSomMarioPipe(){try{const A=window.AudioContext||window.webkitAudioContext;ac=ac||new A();if(ac.state=="suspended")ac.resume();const t0=ac.currentTime+.02;
-// som do cano verde (warp pipe): 3 pulsos descendentes
-[[740,330],[587,262],[440,196]].forEach(([f1,f2],i)=>{const t=t0+i*.17,o=ac.createOscillator(),g=ac.createGain();o.type="square";o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+.14);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.12,t+.01);g.gain.setValueAtTime(.12,t+.11);g.gain.exponentialRampToValueAtTime(.0001,t+.15);o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+.16)})}catch(e){}}
-function setSom(v){SOM=v;const b=$("bs");b.textContent="🔔 Som: "+(SOM?"ligado":"desligado");b.classList.toggle("on",SOM)}
-function togSom(){setSom(!SOM);tocarSomMarioPipe()}
-// ---------- login (e-mail fixo + senha) e definição de senha
-function loginH(){return`<div class="box"><h2 style="margin-top:0">🛵 Entregas</h2><form onsubmit="return login(event)"><label for="em">E-mail</label><input id="em" type="email" autocomplete="username" value="${E(LOGIN_EMAIL)}" required>${MOTO_EXIGIR_SENHA?`<label for="pw">Senha</label><input id="pw" type="password" autocomplete="current-password" required>`:""}<button class="btn dk" type="submit">Entrar</button></form><button class="btn" type="button" onclick="enviarLink()">🔑 Definir / esqueci a senha</button><p class="msg ${LOK?"good":"err"}">${E(LMSG)}</p></div>`}
-function pwH(){const rec=PW=="rec";return`<div class="box"><h2 style="margin-top:0">🔑 Definir senha</h2>${rec?"":`<small style="color:var(--mut)">Conectado como ${E(U&&U.email)}</small>`}<form onsubmit="return salvarSenha(event)"><label for="n1">Nova senha (mínimo 6 caracteres)</label><input id="n1" type="password" autocomplete="new-password" minlength="6" required><label for="n2">Repita a nova senha</label><input id="n2" type="password" autocomplete="new-password" minlength="6" required><button class="btn dk" type="submit">Salvar senha</button></form>${rec?"":`<button class="btn" type="button" onclick="PW='';LMSG='';draw()">Cancelar</button>`}<p class="msg ${LOK?"good":"err"}">${E(LMSG)}</p></div>`}
-function abrirSenha(m){PW=m;LMSG="";LOK=false;draw()}
-async function login(ev){ev.preventDefault();
-// IMPORTANTE: ler os campos ANTES de qualquer draw() (draw recria o formulário e apaga a senha digitada)
-const email=$("em").value.trim().toLowerCase(),pw=($("pw")||{}).value||"";
-const mEl=document.querySelector(".box .msg");if(mEl){mEl.textContent="Entrando…";mEl.className="msg good"}
-// --- conta fixa (hardcoded) do motoboy: confere ANTES do Supabase
-// Entra no Supabase de verdade usando MOTO_SENHA (mesmo sem o campo de senha na tela): assim a sessão é real e a tabela de pedidos funciona.
-if(email===MOTO_LOGIN.trim().toLowerCase()&&(!MOTO_EXIGIR_SENHA||pw===MOTO_SENHA)){
-const r0=await sb.auth.signInWithPassword({email:MOTO_LOGIN.trim().toLowerCase(),password:MOTO_SENHA});
-if(r0.error){LMSG="A conta ainda não tem esta senha no sistema. Toque em “Definir / esqueci a senha”, abra o e-mail e defina a senha igual à MOTO_SENHA do código.";LOK=false;draw();return false}
-try{localStorage.removeItem(FIXO_KEY)}catch(e){}tocarSomMarioPipe();await start(r0.data.user);return false}
-if(!MOTO_EXIGIR_SENHA){LMSG="E-mail não autorizado.";LOK=false;draw();return false}
-const r=await sb.auth.signInWithPassword({email,password:pw});if(r.error){LMSG="E-mail ou senha incorretos. Se ainda não definiu a senha, toque em “Definir / esqueci a senha”.";LOK=false;draw();return false}
-tocarSomMarioPipe();await start(r.data.user);return false}
-async function enviarLink(){const el=$("em"),email=((el&&el.value)||LOGIN_EMAIL).trim().toLowerCase();if(!email){LMSG="Informe o e-mail.";LOK=false;draw();return}
-LMSG="Enviando…";LOK=true;draw();
-const r=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
-if(r.error){LMSG="Não foi possível enviar: "+r.error.message;LOK=false}else{LMSG="Enviamos um link para "+email+". Abra o e-mail neste aparelho, toque no link e defina a senha.";LOK=true}draw()}
-async function salvarSenha(ev){ev.preventDefault();const a=$("n1").value,b=$("n2").value;
-if(a.length<6){LMSG="Use pelo menos 6 caracteres.";LOK=false;draw();return false}
-if(a!==b){LMSG="As senhas não são iguais.";LOK=false;draw();return false}
-const r=await sb.auth.updateUser({password:a});
-if(r.error){LMSG="Erro: "+r.error.message;LOK=false;draw();return false}
-const rec=PW=="rec";PW="";LMSG="";LOK=false;try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
-tst("Senha definida com sucesso ✔");
-if(rec||!U){const s=await sb.auth.getSession();if(s.data&&s.data.session){await start(s.data.session.user);return false}}
-draw();return false}
-async function start(u){const s=await sb.from("staff").select("user_id,papel").eq("user_id",u.id).maybeSingle();if(!s.data){await sb.auth.signOut();U=null;LMSG="Esta conta não tem acesso. Peça para cadastrá-la na equipe da loja.";LOK=false;draw();return}U=u;LMSG="";draw();setSom(true);await load();subRT()}
-// sessão da conta fixa: perfil motoboy, guardada em localStorage (flag dfm_moto_fixo)
-async function startFixo(){U={id:"motoboy-fixo",email:MOTO_LOGIN,role:"motoboy",fixo:true};LMSG="";PW="";draw();setSom(true);await load();subRT()}
-async function sair(){try{localStorage.removeItem(FIXO_KEY)}catch(e){}await sb.auth.signOut();U=null;L=[];SEEN=null;PW="";ORD=null;OPT=null;draw()}
-// ---------- dados: pedidos de delivery prontos para entrega (status "saiu")
-async function load(){const r=await sb.from("pedidos").select("*, pedido_itens(*)").eq("tipo","delivery").eq("status","saiu").order("criado_em",{ascending:true});
-if(r.error){tst("Erro ao carregar: "+r.error.message);return}
-L=r.data.filter(o=>o.arquivado!==true);
-const ids=new Set(L.map(o=>o.id));if(SEEN&&SOM&&[...ids].some(i=>!SEEN.has(i)))tocarSomMarioPipe();SEEN=ids;
-if(ORD&&(ORD.length!==ids.size||ORD.some(i=>!ids.has(i)))){ORD=null;OPT=null} // lista mudou: a rota otimizada deixa de valer
-draw()}
-function subRT(){if(RT)return;RT=sb.channel("moto").on("postgres_changes",{event:"*",schema:"public",table:"pedidos"},()=>{clearTimeout(subRT.t);subRT.t=setTimeout(()=>{if(U)load()},400)}).subscribe();setInterval(()=>{if(U&&!busy&&!PW)load()},15000)}
+      const SB_URL = "https://rawoxuhvluluvxyyqwud.supabase.co", SB_KEY = "sb_publishable_WBNR6zdxRl7b2BjhFUwDbw_345oI6pa";
+      const sb = supabase.createClient(SB_URL, SB_KEY);
+      const R = v => "R$ " + Number(v || 0).toFixed(2).replace(".", ","), E = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c])), dg = t => (t || "").replace(/\D/g, "");
+      const $ = id => document.getElementById(id);
+      const PAG = {pix: "Pix", cartao: "Cartão na entrega", dinheiro: "Dinheiro"};
+      const LOGIN_EMAIL = MOTO_LOGIN;
+      const FIXO_KEY = "dfm_moto_fixo";
+      let U = null, L = [], SOM = false, SEEN = null, CF = "", LMSG = "", LOK = false, RT = null, busy = false, PW = /type=recovery/.test(location.hash) ? "rec" : "";
+      let ORD = null, OPT = null, OPTBUSY = false; // ordem otimizada, resumo da rota, estado do botão
+      const tst = m => {const e = $("toast"); e.textContent = m; e.style.display = "block"; clearTimeout(tst.t); tst.t = setTimeout(() => e.style.display = "none", 5000)};
+      // fallback seguro para colunas opcionais
+      const lsAdd = (k, id) => {try {const a = JSON.parse(localStorage.getItem(k) || "[]"); if (!a.includes(id)) {a.push(id); localStorage.setItem(k, JSON.stringify(a.slice(-500)))} } catch (e) { } };
+      async function upd(id, patch) {
+         const r = await sb.from("pedidos").update(patch).eq("id", id); if (!r.error) return;
+         if ("pronto" in patch && /column|schema|pronto/i.test(r.error.message || "")) {const p2 = {...patch}; delete p2.pronto; lsAdd("dfm_pronto", id); const r2 = await sb.from("pedidos").update(p2).eq("id", id); if (r2.error) throw r2.error; return }
+         throw r.error
+      }
+      // som Super Mario (warp pipe) — Web Audio
+      let ac;
+      function tocarSomMarioPipe() {
+         try {
+            const A = window.AudioContext || window.webkitAudioContext; ac = ac || new A(); if (ac.state == "suspended") ac.resume(); const t0 = ac.currentTime + .02;
+            // som do cano verde (warp pipe): 3 pulsos descendentes
+            [[740, 330], [587, 262], [440, 196]].forEach(([f1, f2], i) => {const t = t0 + i * .17, o = ac.createOscillator(), g = ac.createGain(); o.type = "square"; o.frequency.setValueAtTime(f1, t); o.frequency.exponentialRampToValueAtTime(f2, t + .14); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.12, t + .01); g.gain.setValueAtTime(.12, t + .11); g.gain.exponentialRampToValueAtTime(.0001, t + .15); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + .16)})
+         } catch (e) { }
+      }
+      function setSom(v) {SOM = v; const b = $("bs"); b.textContent = "🔔 Som: " + (SOM ? "ligado" : "desligado"); b.classList.toggle("on", SOM)}
+      function togSom() {setSom(!SOM); tocarSomMarioPipe()}
+      // ---------- login (e-mail fixo + senha) e definição de senha
+      function loginH() {return `<div class="box"><h2 style="margin-top:0">🛵 Entregas</h2><form onsubmit="return login(event)"><label for="em">E-mail</label><input id="em" type="email" autocomplete="username" value="${E(LOGIN_EMAIL)}" required>${MOTO_EXIGIR_SENHA ? `<label for="pw">Senha</label><input id="pw" type="password" autocomplete="current-password" required>` : ""}<button class="btn dk" type="submit">Entrar</button></form><button class="btn" type="button" onclick="enviarLink()">🔑 Definir / esqueci a senha</button><p class="msg ${LOK ? "good" : "err"}">${E(LMSG)}</p></div>`}
+      function pwH() {const rec = PW == "rec"; return `<div class="box"><h2 style="margin-top:0">🔑 Definir senha</h2>${rec ? "" : `<small style="color:var(--mut)">Conectado como ${E(U && U.email)}</small>`}<form onsubmit="return salvarSenha(event)"><label for="n1">Nova senha (mínimo 6 caracteres)</label><input id="n1" type="password" autocomplete="new-password" minlength="6" required><label for="n2">Repita a nova senha</label><input id="n2" type="password" autocomplete="new-password" minlength="6" required><button class="btn dk" type="submit">Salvar senha</button></form>${rec ? "" : `<button class="btn" type="button" onclick="PW='';LMSG='';draw()">Cancelar</button>`}<p class="msg ${LOK ? "good" : "err"}">${E(LMSG)}</p></div>`}
+      function abrirSenha(m) {PW = m; LMSG = ""; LOK = false; draw()}
+      async function login(ev) {
+         ev.preventDefault();
+         // IMPORTANTE: ler os campos ANTES de qualquer draw() (draw recria o formulário e apaga a senha digitada)
+         const email = $("em").value.trim().toLowerCase(), pw = ($("pw") || {}).value || "";
+         const mEl = document.querySelector(".box .msg"); if (mEl) {mEl.textContent = "Entrando…"; mEl.className = "msg good"}
+         // --- conta fixa (hardcoded) do motoboy: confere ANTES do Supabase
+         // Entra no Supabase de verdade usando MOTO_SENHA (mesmo sem o campo de senha na tela): assim a sessão é real e a tabela de pedidos funciona.
+         if (email === MOTO_LOGIN.trim().toLowerCase() && (!MOTO_EXIGIR_SENHA || pw === MOTO_SENHA)) {
+            const r0 = await sb.auth.signInWithPassword({email: MOTO_LOGIN.trim().toLowerCase(), password: MOTO_SENHA});
+            if (r0.error) {LMSG = "A conta ainda não tem esta senha no sistema. Toque em “Definir / esqueci a senha”, abra o e-mail e defina a senha igual à MOTO_SENHA do código."; LOK = false; draw(); return false}
+            try {localStorage.removeItem(FIXO_KEY)} catch (e) { } tocarSomMarioPipe(); await start(r0.data.user); return false
+         }
+         if (!MOTO_EXIGIR_SENHA) {LMSG = "E-mail não autorizado."; LOK = false; draw(); return false}
+         const r = await sb.auth.signInWithPassword({email, password: pw}); if (r.error) {LMSG = "E-mail ou senha incorretos. Se ainda não definiu a senha, toque em “Definir / esqueci a senha”."; LOK = false; draw(); return false}
+         tocarSomMarioPipe(); await start(r.data.user); return false
+      }
+      async function enviarLink() {
+         const el = $("em"), email = ((el && el.value) || LOGIN_EMAIL).trim().toLowerCase(); if (!email) {LMSG = "Informe o e-mail."; LOK = false; draw(); return }
+         LMSG = "Enviando…"; LOK = true; draw();
+         const r = await sb.auth.resetPasswordForEmail(email, {redirectTo: location.origin + location.pathname});
+         if (r.error) {LMSG = "Não foi possível enviar: " + r.error.message; LOK = false} else {LMSG = "Enviamos um link para " + email + ". Abra o e-mail neste aparelho, toque no link e defina a senha."; LOK = true} draw()
+      }
+      async function salvarSenha(ev) {
+         ev.preventDefault(); const a = $("n1").value, b = $("n2").value;
+         if (a.length < 6) {LMSG = "Use pelo menos 6 caracteres."; LOK = false; draw(); return false}
+         if (a !== b) {LMSG = "As senhas não são iguais."; LOK = false; draw(); return false}
+         const r = await sb.auth.updateUser({password: a});
+         if (r.error) {LMSG = "Erro: " + r.error.message; LOK = false; draw(); return false}
+         const rec = PW == "rec"; PW = ""; LMSG = ""; LOK = false; try {history.replaceState(null, "", location.pathname + location.search)} catch (e) { }
+         tst("Senha definida com sucesso ✔");
+         if (rec || !U) {const s = await sb.auth.getSession(); if (s.data && s.data.session) {await start(s.data.session.user); return false} }
+         draw(); return false
+      }
+      async function start(u) {const s = await sb.from("staff").select("user_id,papel").eq("user_id", u.id).maybeSingle(); if (!s.data) {await sb.auth.signOut(); U = null; LMSG = "Esta conta não tem acesso. Peça para cadastrá-la na equipe da loja."; LOK = false; draw(); return } U = u; LMSG = ""; draw(); setSom(true); await load(); subRT()}
+      // sessão da conta fixa: perfil motoboy, guardada em localStorage (flag dfm_moto_fixo)
+      async function startFixo() {U = {id: "motoboy-fixo", email: MOTO_LOGIN, role: "motoboy", fixo: true}; LMSG = ""; PW = ""; draw(); setSom(true); await load(); subRT()}
+      async function sair() {try {localStorage.removeItem(FIXO_KEY)} catch (e) { } await sb.auth.signOut(); U = null; L = []; SEEN = null; PW = ""; ORD = null; OPT = null; draw()}
+      // ---------- dados: pedidos de delivery prontos para entrega (status "saiu")
+      async function load() {
+         const r = await sb.from("pedidos").select("*, pedido_itens(*)").eq("tipo", "delivery").eq("status", "saiu").order("criado_em", {ascending: true});
+         if (r.error) {tst("Erro ao carregar: " + r.error.message); return }
+         L = r.data.filter(o => o.arquivado !== true);
+         const ids = new Set(L.map(o => o.id)); if (SEEN && SOM && [...ids].some(i => !SEEN.has(i))) tocarSomMarioPipe(); SEEN = ids;
+         if (ORD && (ORD.length !== ids.size || ORD.some(i => !ids.has(i)))) {ORD = null; OPT = null} // lista mudou: a rota otimizada deixa de valer
+         draw()
+      }
+      function subRT() {if (RT) return; RT = sb.channel("moto").on("postgres_changes", {event: "*", schema: "public", table: "pedidos"}, () => {clearTimeout(subRT.t); subRT.t = setTimeout(() => {if (U) load()}, 400)}).subscribe(); setInterval(() => {if (U && !busy && !PW) load()}, 15000)}
 
-// ---------- coordenadas / mapas / Waze
-const GEO_LS="dfm_geo";
-const geoCache=()=>{try{return JSON.parse(localStorage.getItem(GEO_LS)||"{}")}catch(e){return{}}};
-const endTxt=o=>`${o.endereco}, ${o.numero_casa} - ${o.bairro}`;
-function coordsDe(o){ // 1) campo "localizacao" (lat,lng)  2) cache de geocodificação  3) null
-const m=(o.localizacao||"").match(/(-?\d{1,3}\.\d+)\s*[,;\s]\s*(-?\d{1,3}\.\d+)/);if(m)return{lat:+m[1],lng:+m[2]};
-return geoCache()[endTxt(o)]||null}
-async function geocodificar(o){const k=endTxt(o),c=geoCache();if(c[k])return c[k];
-try{const r=await fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&q="+encodeURIComponent(k+", "+GEO_SUFIXO));const j=await r.json();
-if(j&&j[0]){const p={lat:+j[0].lat,lng:+j[0].lon};c[k]=p;try{localStorage.setItem(GEO_LS,JSON.stringify(c))}catch(e){}return p}}catch(e){}
-return null}
-const mapU=o=>o.localizacao?"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(o.localizacao):"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(endTxt(o));
-const wazeU=o=>{const c=coordsDe(o);return c?`https://waze.com/ul?ll=${c.lat},${c.lng}&navigate=yes`:"https://waze.com/ul?q="+encodeURIComponent(endTxt(o))+"&navigate=yes"};
-const waU=o=>{let d=dg(o.telefone);if(d.length<=11)d="55"+d;return"https://wa.me/"+d+"?text="+encodeURIComponent(`Olá, ${o.nome}! Sou o entregador do pedido #${o.numero}, estou a caminho.`)};
+      // ---------- coordenadas / mapas / Waze
+      const GEO_LS = "dfm_geo";
+      const geoCache = () => {try {return JSON.parse(localStorage.getItem(GEO_LS) || "{}")} catch (e) {return {}} };
+      const endTxt = o => `${o.endereco}, ${o.numero_casa} - ${o.bairro}`;
+      function coordsDe(o) { // 1) campo "localizacao" (lat,lng)  2) cache de geocodificação  3) null
+         const m = (o.localizacao || "").match(/(-?\d{1,3}\.\d+)\s*[,;\s]\s*(-?\d{1,3}\.\d+)/); if (m) return {lat: +m[1], lng: +m[2]};
+         return geoCache()[endTxt(o)] || null
+      }
+      async function geocodificar(o) {
+         const k = endTxt(o), c = geoCache(); if (c[k]) return c[k];
+         try {
+            const r = await fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&q=" + encodeURIComponent(k + ", " + GEO_SUFIXO)); const j = await r.json();
+            if (j && j[0]) {const p = {lat: +j[0].lat, lng: +j[0].lon}; c[k] = p; try {localStorage.setItem(GEO_LS, JSON.stringify(c))} catch (e) { } return p}
+         } catch (e) { }
+         return null
+      }
+      const mapU = o => o.localizacao ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(o.localizacao) : "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(endTxt(o));
+      const wazeU = o => {const c = coordsDe(o); return c ? `https://waze.com/ul?ll=${c.lat},${c.lng}&navigate=yes` : "https://waze.com/ul?q=" + encodeURIComponent(endTxt(o)) + "&navigate=yes"};
+      const waU = o => {let d = dg(o.telefone); if (d.length <= 11) d = "55" + d; return "https://wa.me/" + d + "?text=" + encodeURIComponent(`Olá, ${o.nome}! Sou o entregador do pedido #${o.numero}, estou a caminho.`)};
 
-// ---------- rota mais curta (vizinho mais próximo com Haversine; distância/tempo reais via OSRM quando disponível)
-function hav(a,b){const r=x=>x*Math.PI/180,dLa=r(b.lat-a.lat),dLo=r(b.lng-a.lng),h=Math.sin(dLa/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLo/2)**2;return 12742*Math.asin(Math.sqrt(h))}
-function posAtual(){return new Promise(res=>{if(!navigator.geolocation)return res(null);navigator.geolocation.getCurrentPosition(p=>res({lat:p.coords.latitude,lng:p.coords.longitude}),()=>res(null),{enableHighAccuracy:true,timeout:8000,maximumAge:30000})})}
-async function otimizar(){if(OPTBUSY||L.length<2){if(L.length<2)tst("É preciso ter 2 ou mais entregas para otimizar.");return}
-OPTBUSY=true;draw();
-try{
-let origem=await posAtual(),fonteOrig="sua localização";if(!origem&&LOJA){origem=LOJA;fonteOrig="a loja"}
-const pts=[];const sem=[];
-for(const o of L){let c=coordsDe(o);if(!c){await new Promise(r=>setTimeout(r,1100));c=await geocodificar(o)}if(c)pts.push({id:o.id,...c});else sem.push(o.id)}
-if(!pts.length){tst("Não foi possível localizar os endereços no mapa.");OPTBUSY=false;draw();return}
-let atual=origem,rest=pts.slice(),ordem=[];
-if(!atual){atual=rest.shift();ordem.push(atual);fonteOrig="a 1ª entrega"}
-while(rest.length){let bi=0,bd=Infinity;rest.forEach((p,i)=>{const d=hav(atual,p);if(d<bd){bd=d;bi=i}});atual=rest.splice(bi,1)[0];ordem.push(atual)}
-const seq=(origem&&fonteOrig!=="a 1ª entrega"?[origem]:[]).concat(ordem);
-let km=0;for(let i=1;i<seq.length;i++)km+=hav(seq[i-1],seq[i]);km*=1.3;let min=km/25*60,fonte="estimado";
-try{if(seq.length>=2){const u="https://router.project-osrm.org/route/v1/driving/"+seq.map(p=>p.lng+","+p.lat).join(";")+"?overview=false";const j=await (await fetch(u)).json();if(j.routes&&j.routes[0]){km=j.routes[0].distance/1000;min=j.routes[0].duration/60;fonte="OSRM"}}}catch(e){}
-ORD=ordem.map(p=>p.id).concat(sem);OPT={km,min,fonte,orig:fonteOrig,sem:sem.length};
-tst("Rota otimizada ✔")
-}catch(e){tst("Erro ao otimizar: "+(e.message||e))}
-OPTBUSY=false;draw()}
-function limparRota(){ORD=null;OPT=null;draw()}
-const fmtMin=m=>m>=60?Math.floor(m/60)+"h "+Math.round(m%60)+"min":Math.round(m)+" min";
-function optH(){if(!L.length)return"";const s=OPT?`<div class="sum">Ordem otimizada a partir de ${E(OPT.orig)}.<br>Total: <b>${OPT.km.toFixed(1).replace(".",",")} km</b> · <b>${fmtMin(OPT.min)}</b> <small>(${OPT.fonte=="OSRM"?"rota real":"estimativa"})</small>${OPT.sem?`<br><small>${OPT.sem} entrega(s) sem localização ficaram no fim.</small>`:""}</div>`:"";
-return`<div class="opt"><button class="btn dk" ${OPTBUSY||L.length<2?"disabled":""} onclick="otimizar()">${OPTBUSY?"Calculando…":"🧭 Otimizar Rota (Mais Curta)"}</button>${OPT?`<button class="btn" style="margin-top:8px" onclick="limparRota()">Voltar à ordem original</button>`:""}${s}</div>`}
+      // ---------- rota mais curta (vizinho mais próximo com Haversine; distância/tempo reais via OSRM quando disponível)
+      function hav(a, b) {const r = x => x * Math.PI / 180, dLa = r(b.lat - a.lat), dLo = r(b.lng - a.lng), h = Math.sin(dLa / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLo / 2) ** 2; return 12742 * Math.asin(Math.sqrt(h))}
+      function posAtual() {return new Promise(res => {if (!navigator.geolocation) return res(null); navigator.geolocation.getCurrentPosition(p => res({lat: p.coords.latitude, lng: p.coords.longitude}), () => res(null), {enableHighAccuracy: true, timeout: 8000, maximumAge: 30000})})}
+      async function otimizar() {
+         if (OPTBUSY || L.length < 2) {if (L.length < 2) tst("É preciso ter 2 ou mais entregas para otimizar."); return }
+         OPTBUSY = true; draw();
+         try {
+            let origem = await posAtual(), fonteOrig = "sua localização"; if (!origem && LOJA) {origem = LOJA; fonteOrig = "a loja"}
+            const pts = []; const sem = [];
+            for (const o of L) {let c = coordsDe(o); if (!c) {await new Promise(r => setTimeout(r, 1100)); c = await geocodificar(o)} if (c) pts.push({id: o.id, ...c}); else sem.push(o.id)}
+            if (!pts.length) {tst("Não foi possível localizar os endereços no mapa."); OPTBUSY = false; draw(); return }
+            let atual = origem, rest = pts.slice(), ordem = [];
+            if (!atual) {atual = rest.shift(); ordem.push(atual); fonteOrig = "a 1ª entrega"}
+            while (rest.length) {let bi = 0, bd = Infinity; rest.forEach((p, i) => {const d = hav(atual, p); if (d < bd) {bd = d; bi = i} }); atual = rest.splice(bi, 1)[0]; ordem.push(atual)}
+            const seq = (origem && fonteOrig !== "a 1ª entrega" ? [origem] : []).concat(ordem);
+            let km = 0; for (let i = 1; i < seq.length; i++)km += hav(seq[i - 1], seq[i]); km *= 1.3; let min = km / 25 * 60, fonte = "estimado";
+            try {if (seq.length >= 2) {const u = "https://router.project-osrm.org/route/v1/driving/" + seq.map(p => p.lng + "," + p.lat).join(";") + "?overview=false"; const j = await (await fetch(u)).json(); if (j.routes && j.routes[0]) {km = j.routes[0].distance / 1000; min = j.routes[0].duration / 60; fonte = "OSRM"} } } catch (e) { }
+            ORD = ordem.map(p => p.id).concat(sem); OPT = {km, min, fonte, orig: fonteOrig, sem: sem.length};
+            tst("Rota otimizada ✔")
+         } catch (e) {tst("Erro ao otimizar: " + (e.message || e))}
+         OPTBUSY = false; draw()
+      }
+      function limparRota() {ORD = null; OPT = null; draw()}
+      const fmtMin = m => m >= 60 ? Math.floor(m / 60) + "h " + Math.round(m % 60) + "min" : Math.round(m) + " min";
+      function optH() {
+         if (!L.length) return ""; const s = OPT ? `<div class="sum">Ordem otimizada a partir de ${E(OPT.orig)}.<br>Total: <b>${OPT.km.toFixed(1).replace(".", ",")} km</b> · <b>${fmtMin(OPT.min)}</b> <small>(${OPT.fonte == "OSRM" ? "rota real" : "estimativa"})</small>${OPT.sem ? `<br><small>${OPT.sem} entrega(s) sem localização ficaram no fim.</small>` : ""}</div>` : "";
+         return `<div class="opt"><button class="btn dk" ${OPTBUSY || L.length < 2 ? "disabled" : ""} onclick="otimizar()">${OPTBUSY ? "Calculando…" : "🧭 Otimizar Rota (Mais Curta)"}</button>${OPT ? `<button class="btn" style="margin-top:8px" onclick="limparRota()">Voltar à ordem original</button>` : ""}${s}</div>`
+      }
 
-const itLi=i=>`<li><b>${i.qtd}x</b> ${E(i.nome)}${(i.complementos||[]).length?` <small>+ ${E(i.complementos.map(c=>c.nome).join(", "))}</small>`:""}${i.observacao?`<em>⚠ ${E(i.observacao)}</em>`:""}</li>`;
-function card(o,idx){const pago=!!o.pago,cd=CF==o.id;return`<div class="card"><div class="top"><span class="num">${ORD?(idx+1)+"º · ":""}#${o.numero}</span><span class="badge ${pago?"pago":"cob"}">${pago?"PAGO":"COBRAR"}</span></div>
+      const itLi = i => `<li><b>${i.qtd}x</b> ${E(i.nome)}${(i.complementos || []).length ? ` <small>+ ${E(i.complementos.map(c => c.nome).join(", "))}</small>` : ""}${i.observacao ? `<em>⚠ ${E(i.observacao)}</em>` : ""}</li>`;
+      function card(o, idx) {
+         const pago = !!o.pago, cd = CF == o.id; return `<div class="card"><div class="top"><span class="num">${ORD ? (idx + 1) + "º · " : ""}#${o.numero}</span><span class="badge ${pago ? "pago" : "cob"}">${pago ? "PAGO" : "COBRAR"}</span></div>
 <div class="cli">${E(o.nome)}</div><div>${E(o.telefone)}</div>
-<div class="addr">📍 ${E(o.endereco)}, ${E(o.numero_casa)} - ${E(o.bairro)}</div>${o.referencia?`<div class="ref">Ref.: ${E(o.referencia)}</div>`:""}
-<ul class="its">${(o.pedido_itens||[]).map(itLi).join("")}</ul>${o.observacao?`<div class="ref">Obs.: ${E(o.observacao)}</div>`:""}
-<div class="val">${pago?"Nada a cobrar":"Cobrar "+R(o.total)}<small>${E(PAG[o.pagamento]||"")}${o.pagamento=="dinheiro"&&+o.troco?" · troco para "+R(o.troco):""}</small></div>
+<div class="addr">📍 ${E(o.endereco)}, ${E(o.numero_casa)} - ${E(o.bairro)}</div>${o.referencia ? `<div class="ref">Ref.: ${E(o.referencia)}</div>` : ""}
+<ul class="its">${(o.pedido_itens || []).map(itLi).join("")}</ul>${o.observacao ? `<div class="ref">Obs.: ${E(o.observacao)}</div>` : ""}
+<div class="val">${pago ? "Nada a cobrar" : "Cobrar " + R(o.total)}<small>${E(PAG[o.pagamento] || "")}${o.pagamento == "dinheiro" && +o.troco ? " · troco para " + R(o.troco) : ""}</small></div>
 <div class="row"><a class="btn wa" href="${waU(o)}" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a><a class="btn mp" href="${mapU(o)}" target="_blank" rel="noopener noreferrer">🗺️ Google Maps</a>
 <a class="btn wz" href="${wazeU(o)}" target="_blank" rel="noopener noreferrer">🧭 Abrir no Waze</a>
-<button class="btn ok ${cd?"c":""}" onclick="conf('${o.id}')">${cd?"Toque de novo para confirmar":"✔ Confirmar Entrega"}</button></div></div>`}
-async function conf(id){if(CF!==id){CF=id;draw();setTimeout(()=>{if(CF==id){CF="";draw()}},5000);return}
-CF="";busy=true;try{await upd(id,{status:"concluido",pronto:true});tst("Entrega confirmada ✔")}catch(e){tst("Erro: "+(e.message||e))}busy=false;await load()}
-function draw(){const hd=$("hd");hd.style.display=(U&&PW!="rec")?"flex":"none";$("bsn").style.display=(U&&U.fixo)?"none":""; // conta fixa não tem senha no Supabase
-if(PW){$("app").innerHTML=pwH();return}
-let lista=L;if(ORD){const ix=new Map(ORD.map((id,i)=>[id,i]));lista=L.slice().sort((a,b)=>(ix.has(a.id)?ix.get(a.id):1e9)-(ix.has(b.id)?ix.get(b.id):1e9))}
-$("app").innerHTML=U?`<div class="cnt">${L.length?L.length+(L.length==1?" entrega disponível":" entregas disponíveis"):""}</div>${optH()}${lista.map((o,i)=>card(o,i)).join("")||'<div class="empty">Nenhuma entrega disponível agora.<br><small>A lista atualiza sozinha.</small></div>'}`:loginH()}
-// link de recuperação aberto: mostra a tela de nova senha
-sb.auth.onAuthStateChange(ev=>{if(ev=="PASSWORD_RECOVERY"){PW="rec";LMSG="";draw()}});
-(async()=>{try{
-const s=await sb.auth.getSession();if(s.data&&s.data.session&&PW!="rec"){await start(s.data.session.user);return}}catch(e){}draw()})();
-</script>
+<button class="btn ok ${cd ? "c" : ""}" onclick="conf('${o.id}')">${cd ? "Toque de novo para confirmar" : "✔ Confirmar Entrega"}</button></div></div>`
+      }
+      async function conf(id) {
+         if (CF !== id) {CF = id; draw(); setTimeout(() => {if (CF == id) {CF = ""; draw()} }, 5000); return }
+         CF = ""; busy = true; try {await upd(id, {status: "concluido", pronto: true}); tst("Entrega confirmada ✔")} catch (e) {tst("Erro: " + (e.message || e))} busy = false; await load()
+      }
+      function draw() {
+         const hd = $("hd"); hd.style.display = (U && PW != "rec") ? "flex" : "none"; $("bsn").style.display = (U && U.fixo) ? "none" : ""; // conta fixa não tem senha no Supabase
+         if (PW) {$("app").innerHTML = pwH(); return }
+         let lista = L; if (ORD) {const ix = new Map(ORD.map((id, i) => [id, i])); lista = L.slice().sort((a, b) => (ix.has(a.id) ? ix.get(a.id) : 1e9) - (ix.has(b.id) ? ix.get(b.id) : 1e9))}
+         $("app").innerHTML = U ? `<div class="cnt">${L.length ? L.length + (L.length == 1 ? " entrega disponível" : " entregas disponíveis") : ""}</div>${optH()}${lista.map((o, i) => card(o, i)).join("") || '<div class="empty">Nenhuma entrega disponível agora.<br><small>A lista atualiza sozinha.</small></div>'}` : loginH()
+      }
+      // link de recuperação aberto: mostra a tela de nova senha
+      sb.auth.onAuthStateChange(ev => {if (ev == "PASSWORD_RECOVERY") {PW = "rec"; LMSG = ""; draw()} });
+      (async () => {
+         try {
+            const s = await sb.auth.getSession(); if (s.data && s.data.session && PW != "rec") {await start(s.data.session.user); return }
+         } catch (e) { } draw()
+      })();
+   </script>
 </body>
+
 </html>
